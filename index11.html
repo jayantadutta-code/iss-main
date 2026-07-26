@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="India Soft Solutions - Interactive Creative WebGL Portfolio Showcase. Reimagined digital production.">
+  <title>India Soft Solutions (ISS) | Interactive WebGL Showcase</title>
+  <link rel="icon" href="logo.ico" type="image/x-icon">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    // URL Cleanup: Hide index11.html in address bar immediately
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, "", "/");
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg-dark: #03000a;
+      --accent-pink: #ec4899;
+      --accent-cyan: #06b6d4;
+      --accent-purple: #8b5cf6;
+      --text-light: #f8fafc;
+      --text-gray: #94a3b8;
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Space Grotesk', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      cursor: none; /* Custom cursor */
+    }
+
+    /* WebGL Canvas */
+    #webgl-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Custom Cursor */
+    .custom-cursor {
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
+      position: fixed;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 10000;
+      mix-blend-mode: difference;
+      transition: width 0.2s, height 0.2s;
+    }
+
+    .custom-cursor-ring {
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid rgba(236, 72, 153, 0.4);
+      border-radius: 50%;
+      position: fixed;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.08s ease-out, width 0.2s, height 0.2s;
+    }
+
+    /* Header Nav */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 30px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.3em;
+      letter-spacing: 2px;
+      background: linear-gradient(to right, #fff, var(--text-gray));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo img {
+      height: 24px;
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .audio-toggle-btn, .back-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 10px 20px;
+      border-radius: 30px;
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 0.9em;
+      font-weight: 500;
+      cursor: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      text-decoration: none;
+    }
+
+    .audio-toggle-btn:hover, .back-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(236, 72, 153, 0.4);
+      box-shadow: 0 0 15px rgba(236, 72, 153, 0.25);
+    }
+
+    /* Scroll Containers */
+    #scroll-container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+    }
+
+    section {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 10%;
+      position: relative;
+    }
+
+    /* Content Layouts */
+    .content-panel {
+      max-width: 620px;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .content-panel.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-tag {
+      font-family: var(--font-display);
+      font-size: 0.85em;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+    }
+
+    #sec-hero .section-tag { color: var(--accent-cyan); border-color: rgba(6, 182, 212, 0.3); }
+    #sec-services .section-tag { color: var(--accent-purple); border-color: rgba(139, 92, 246, 0.3); }
+    #sec-products .section-tag { color: var(--accent-pink); border-color: rgba(236, 72, 153, 0.3); }
+    #sec-contact .section-tag { color: #f59e0b; border-color: rgba(245, 158, 11, 0.3); }
+
+    h1, h2 {
+      font-family: var(--font-display);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 25px;
+    }
+
+    h1 {
+      font-size: 4em;
+      letter-spacing: -2px;
+    }
+
+    h2 {
+      font-size: 3em;
+      letter-spacing: -1px;
+    }
+
+    p.lead-text {
+      font-size: 1.2em;
+      line-height: 1.6;
+      color: var(--text-gray);
+      margin-bottom: 30px;
+    }
+
+    /* Glassmorphic Grid Cards */
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .service-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+    }
+
+    .service-card:hover {
+      border-color: rgba(139, 92, 246, 0.3);
+      background: rgba(255, 255, 255, 0.04);
+      transform: translateY(-3px);
+    }
+
+    .service-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.15em;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .service-card p {
+      font-size: 0.85em;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    /* Product Scroll List */
+    .products-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .product-list-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 12px;
+      padding: 15px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .product-name {
+      font-weight: 600;
+      font-size: 1.1em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .product-links {
+      display: flex;
+      gap: 8px;
+    }
+
+    .p-dl-btn {
+      font-size: 0.75em;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .p-dl-btn.apk { background: var(--accent-cyan); }
+    .p-dl-btn.exe { background: var(--accent-purple); }
+    .p-dl-btn.dmg { background: #475569; }
+    .p-dl-btn.visit { background: var(--accent-pink); }
+    .p-dl-btn:hover { opacity: 0.85; }
+
+    .coming-tag {
+      font-size: 0.7em;
+      padding: 2px 8px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-gray);
+      border-radius: 10px;
+      font-weight: 500;
+    }
+
+    .contact-btn {
+      background: linear-gradient(90deg, var(--accent-pink), var(--accent-purple));
+      color: #fff;
+      border: none;
+      padding: 15px 35px;
+      border-radius: 30px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1em;
+      cursor: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(236, 72, 153, 0.35);
+      transition: all 0.3s ease;
+    }
+
+    .contact-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(236, 72, 153, 0.5);
+    }
+
+    /* Scroll Indicators */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 10%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.8em;
+      color: rgba(255, 255, 255, 0.4);
+      animation: floatPulse 2s infinite ease-in-out;
+    }
+
+    .scroll-line {
+      width: 40px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.2);
+      position: relative;
+    }
+
+    .scroll-line-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 50%;
+      background: var(--accent-pink);
+      animation: scrollAnim 1.5s infinite linear;
+    }
+
+    @keyframes scrollAnim {
+      0% { left: 0; width: 0%; }
+      50% { left: 0; width: 100%; }
+      100% { left: 100%; width: 0%; }
+    }
+
+    @keyframes floatPulse {
+      0%, 100% { transform: translateY(0); opacity: 0.4; }
+      50% { transform: translateY(-5px); opacity: 0.8; }
+    }
+
+    /* Loading Screen overlay */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: var(--bg-dark);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.8s ease;
+    }
+
+    .loader-title {
+      font-family: var(--font-display);
+      font-size: 2.2em;
+      font-weight: 800;
+      letter-spacing: 4px;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .loader-bar {
+      width: 200px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.08);
+      position: relative;
+      overflow: hidden;
+      border-radius: 2px;
+    }
+
+    .loader-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-pink));
+      transition: width 0.4s ease;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 { font-size: 2.8em; }
+      h2 { font-size: 2.2em; }
+      section { padding: 0 5%; }
+      .services-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="custom-cursor" id="cursor"></div>
+  <div class="custom-cursor-ring" id="cursor-ring"></div>
+
+  <!-- Loading Screen -->
+  <div id="loader">
+    <div class="loader-title">INDIA SOFT SOLUTIONS</div>
+    <div class="loader-bar">
+      <div class="loader-progress" id="loader-progress"></div>
+    </div>
+  </div>
+
+  <!-- WebGL Background -->
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- Navigation -->
+  <header>
+    <a href="#" class="logo">
+      <img src="logo.png" alt="ISS Logo" onerror="this.style.display='none'">
+      <span>INDIA SOFT SOLUTIONS</span>
+    </a>
+    <div class="nav-controls">
+      <a href="index.html" class="back-btn"><i class="fas fa-home"></i> Home</a>
+      <button class="audio-toggle-btn" id="audio-toggle"><i class="fas fa-volume-mute"></i> Sound On</button>
+    </div>
+  </header>
+
+  <!-- Scroll Sections -->
+  <div id="scroll-container">
+    
+    <!-- Hero Section -->
+    <section id="sec-hero">
+      <div class="content-panel" id="panel-hero">
+        <span class="section-tag">Interactive Experience</span>
+        <h1>We Shape Light &amp; Pixels</h1>
+        <p class="lead-text">India Soft Solutions creates bespoke WebGL interfaces, custom software engineering, and premium mobile applications designed to stun audiences.</p>
+        <p style="font-size:0.9em; color:var(--accent-cyan);"><i class="fas fa-mouse-pointer"></i> Move your cursor or scroll to interact with the particle system.</p>
+      </div>
+      <div class="scroll-indicator">
+        <div class="scroll-line"><div class="scroll-line-fill"></div></div>
+        <span>Scroll down to navigate</span>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="sec-services">
+      <div class="content-panel" id="panel-services">
+        <span class="section-tag">Our Services</span>
+        <h2>Crafting Digital Artistry</h2>
+        <p class="lead-text">We bridge the gap between creative design and robust computational execution.</p>
+        
+        <div class="services-grid">
+          <div class="service-card">
+            <h3><i class="fas fa-globe" style="color:var(--accent-purple);"></i> Web Development</h3>
+            <p>WebGL, Three.js, high-performance static portfolios, and interactive React frontends.</p>
+          </div>
+          <div class="service-card">
+            <h3><i class="fas fa-mobile-alt" style="color:var(--accent-cyan);"></i> App Development</h3>
+            <p>Cross-platform Flutter frameworks and native mobile application engineering.</p>
+          </div>
+          <div class="service-card">
+            <h3><i class="fas fa-bezier-curve" style="color:var(--accent-pink);"></i> UI/UX Design</h3>
+            <p>Stunning, rich custom design interfaces, branding guides, and high-fidelity mockups.</p>
+          </div>
+          <div class="service-card">
+            <h3><i class="fas fa-shield-alt" style="color:#f59e0b;"></i> Cloud Operations</h3>
+            <p>Secure databases, CDN caching, scaling, and round-the-clock server maintenance.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="sec-products">
+      <div class="content-panel" id="panel-products">
+        <span class="section-tag">Product Suite</span>
+        <h2>Proprietary Inventions</h2>
+        <p class="lead-text">Take a look at the software products built inside our labs.</p>
+        
+        <div class="products-list">
+          <div class="product-list-item">
+            <div class="product-header">
+              <span class="product-name"><i class="fas fa-comments" style="color:var(--accent-pink);"></i> Nest Communication</span>
+              <div class="product-links">
+                <a href="https://github.com/jayantadutta-code/nestAPKfile/releases/download/v2.1.0/app-release.apk" class="p-dl-btn apk" target="_blank">.apk</a>
+                <a href="https://github.com/jayantadutta-code/nestEXEfile/releases/download/v2.1.0/nest_communication.zip" class="p-dl-btn exe" target="_blank">.exe</a>
+                <a href="https://github.com/jayantadutta-code/nestDMGfile/releases/download/v2.1.0/Nest.Communication.app.zip" class="p-dl-btn dmg" target="_blank">.dmg</a>
+                <a href="https://nestcommunication.vercel.app/" class="p-dl-btn visit" target="_blank">Visit</a>
+              </div>
+            </div>
+            <p style="font-size:0.85em; color:var(--text-gray);">Full video meetings, low latency channels, camera controls and simple responsive layouts.</p>
+          </div>
+          
+          <div class="product-list-item">
+            <div class="product-header">
+              <span class="product-name"><i class="fas fa-file-contract" style="color:var(--accent-pink);"></i> LeaseVault</span>
+              <div class="product-links">
+                <a href="https://github.com/jayantadutta-code/LeaseVaultAPK/releases/download/v1.0.0/app-release.apk" class="p-dl-btn apk" target="_blank">.apk</a>
+                <a href="https://github.com/jayantadutta-code/LeaseVaultEXE/releases/download/v1.0.0/lease_vault.zip" class="p-dl-btn exe" target="_blank">.exe</a>
+                <a href="https://github.com/jayantadutta-code/LeaseVaultDMG/releases/download/v1.0.0/LeaseVault.app.zip" class="p-dl-btn dmg" target="_blank">.dmg</a>
+                <a href="https://leasevaultweb.netlify.app" class="p-dl-btn visit" target="_blank">Visit</a>
+              </div>
+            </div>
+            <p style="font-size:0.85em; color:var(--text-gray);">Rental Management App, it is a Flutter-based rental management application powered by a Supabase backend that streamlines the renting process for landlords and tenants.</p>
+          </div>
+          
+          <div class="product-list-item">
+            <div class="product-header">
+              <span class="product-name" style="color:#64748b;"><i class="fas fa-key"></i> SecureVault</span>
+              <span class="coming-tag">Coming Soon</span>
+            </div>
+            <p style="font-size:0.85em; color:#475569;">Encrypted password manager utility with offline storage vaults.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="sec-contact">
+      <div class="content-panel" id="panel-contact">
+        <span class="section-tag">Get in Touch</span>
+        <h2>Let's Engineer Together</h2>
+        <p class="lead-text">Ready to elevate your project with rich interactivity and professional technical architectures? Our engineers are waiting for you.</p>
+        <a href="mailto:indiasoftsolutions@gmail.com" class="contact-btn"><i class="fas fa-envelope"></i> Send an Inquiry</a>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <script>
+    // Global Constants & State
+    let scene, camera, renderer, particles;
+    let particleCount = 4500;
+    
+    // Position Arrays for Morph Targets
+    let posCloud = new Float32Array(particleCount * 3);
+    let posTorus = new Float32Array(particleCount * 3);
+    let posSphere = new Float32Array(particleCount * 3);
+    let posWave = new Float32Array(particleCount * 3);
+    
+    // Active position coordinates
+    let positions;
+    
+    // Interaction Variables
+    let scrollProgress = 0;
+    let targetScrollProgress = 0;
+    let mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
+    let mouse3D = new THREE.Vector3(0, 0, 0);
+    
+    // Audio Context State
+    let audioCtx = null;
+    let ambientOsc = null;
+    let ambientFilter = null;
+    let audioMuted = true;
+    
+    // Custom Cursor elements
+    const cursor = document.getElementById('cursor');
+    const cursorRing = document.getElementById('cursor-ring');
+
+    // 1. Custom Cursor setup
+    window.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+      
+      setTimeout(() => {
+        cursorRing.style.left = e.clientX + 'px';
+        cursorRing.style.top = e.clientY + 'px';
+      }, 30);
+      
+      // Normalized mouse coords for Three.js
+      mouse.targetX = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.targetY = -(e.clientY / window.innerHeight) * 2 + 1;
+    });
+
+    document.addEventListener('mousedown', () => {
+      cursor.style.width = '14px';
+      cursor.style.height = '14px';
+      cursorRing.style.width = '50px';
+      cursorRing.style.height = '50px';
+      playChime(400 + Math.random() * 800);
+    });
+
+    document.addEventListener('mouseup', () => {
+      cursor.style.width = '8px';
+      cursor.style.height = '8px';
+      cursorRing.style.width = '36px';
+      cursorRing.style.height = '36px';
+    });
+
+    // 2. Synthesized Audio System
+    function initAudio() {
+      if (audioCtx) return;
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContextClass();
+        
+        // Low ambient drone oscillator
+        ambientOsc = audioCtx.createOscillator();
+        ambientOsc.type = 'sawtooth';
+        ambientOsc.frequency.setValueAtTime(55, audioCtx.currentTime); // A1 note
+        
+        ambientFilter = audioCtx.createBiquadFilter();
+        ambientFilter.type = 'lowpass';
+        ambientFilter.frequency.setValueAtTime(140, audioCtx.currentTime);
+        
+        const gainNode = audioCtx.createGain();
+        gainNode.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        
+        ambientOsc.connect(ambientFilter);
+        ambientFilter.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        ambientOsc.start();
+      } catch (err) {
+        console.warn("Audio Context blocked or unsupported.", err);
+      }
+    }
+
+    function playChime(freq) {
+      if (!audioCtx || audioMuted) return;
+      
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      
+      gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+      // Exponential decay
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.2);
+      
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 1.2);
+    }
+
+    function toggleAudio() {
+      if (audioMuted) {
+        initAudio();
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        audioMuted = false;
+        document.getElementById('audio-toggle').innerHTML = '<i class="fas fa-volume-up"></i> Sound Off';
+      } else {
+        audioMuted = true;
+        document.getElementById('audio-toggle').innerHTML = '<i class="fas fa-volume-mute"></i> Sound On';
+      }
+    }
+    
+    document.getElementById('audio-toggle').addEventListener('click', toggleAudio);
+
+    // 3. WebGL Precalculations
+    function precalculateShapes() {
+      for (let i = 0; i < particleCount; i++) {
+        const i3 = i * 3;
+        
+        // Shape 1: Swirling Organic Cloud (Hero)
+        const thetaCloud = Math.random() * Math.PI * 2;
+        const phiCloud = Math.acos((Math.random() * 2) - 1);
+        const rCloud = 12 + Math.random() * 10;
+        
+        posCloud[i3] = rCloud * Math.sin(phiCloud) * Math.cos(thetaCloud);
+        posCloud[i3 + 1] = rCloud * Math.sin(phiCloud) * Math.sin(thetaCloud) + Math.sin(thetaCloud * 3) * 3;
+        posCloud[i3 + 2] = rCloud * Math.cos(phiCloud) * 0.8;
+        
+        // Shape 2: Torus (Services)
+        const u = Math.random() * Math.PI * 2;
+        const v = Math.random() * Math.PI * 2;
+        const R = 18; // Torus ring radius
+        const r = 5.0; // Torus pipe radius
+        
+        posTorus[i3] = (R + r * Math.cos(v)) * Math.cos(u);
+        posTorus[i3 + 1] = (R + r * Math.cos(v)) * Math.sin(u);
+        posTorus[i3 + 2] = r * Math.sin(v);
+        
+        // Shape 3: Fibonacci Sphere (Products)
+        const phiSphere = Math.acos(-1 + (2 * i) / particleCount);
+        const thetaSphere = Math.sqrt(particleCount * Math.PI) * phiSphere;
+        const rSphere = 14 + Math.sin(phiSphere * 6) * 1.5; // Undulating surface
+        
+        posSphere[i3] = rSphere * Math.sin(phiSphere) * Math.cos(thetaSphere);
+        posSphere[i3 + 1] = rSphere * Math.sin(phiSphere) * Math.sin(thetaSphere);
+        posSphere[i3 + 2] = rSphere * Math.cos(phiSphere);
+        
+        // Shape 4: Terrain Wave Grid (Contact)
+        const gridCols = Math.floor(Math.sqrt(particleCount));
+        const col = i % gridCols;
+        const row = Math.floor(i / gridCols);
+        const scale = 2.4;
+        
+        posWave[i3] = (col - gridCols / 2) * scale;
+        posWave[i3 + 1] = -8.0; // Flat floor y height
+        posWave[i3 + 2] = (row - gridCols / 2) * scale;
+      }
+    }
+
+    // 4. Initialize Three.js WebGL Scene
+    function init() {
+      // Scene
+      scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x03000a, 0.015);
+
+      // Camera
+      camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.z = 45;
+
+      // Renderer
+      renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById('webgl-canvas'),
+        antialias: true,
+        alpha: false
+      });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // Build Geometry
+      precalculateShapes();
+      
+      const geometry = new THREE.BufferGeometry();
+      positions = new Float32Array(particleCount * 3);
+      // Copy initial shape (Cloud) into positions array
+      positions.set(posCloud);
+      
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      
+      // Material: Custom circular points using simple canvas texture
+      const pMaterial = new THREE.PointsMaterial({
+        color: 0xec4899,
+        size: 0.18,
+        transparent: true,
+        opacity: 0.85,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+      
+      // Points Mesh
+      particles = new THREE.Points(geometry, pMaterial);
+      scene.add(particles);
+      
+      // Initial scroll panels animation
+      updateVisiblePanels();
+    }
+
+    // 5. Scroll Handler
+    window.addEventListener('scroll', () => {
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight > 0) {
+        targetScrollProgress = window.scrollY / docHeight;
+      }
+      updateVisiblePanels();
+    });
+
+    function updateVisiblePanels() {
+      const panels = ['panel-hero', 'panel-services', 'panel-products', 'panel-contact'];
+      panels.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const inViewport = rect.top < window.innerHeight * 0.75 && rect.bottom > window.innerHeight * 0.15;
+          el.classList.toggle('visible', inViewport);
+        }
+      });
+    }
+
+    // 6. Main Render Loop
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const time = performance.now() * 0.0008;
+
+      // Smoothly interpolate mouse values
+      mouse.x += (mouse.targetX - mouse.x) * 0.1;
+      mouse.y += (mouse.targetY - mouse.y) * 0.1;
+
+      // Project mouse into 3D space
+      mouse3D.set(mouse.x * 25, mouse.y * 15, 5);
+
+      // Interpolate scroll progress smoothly
+      scrollProgress += (targetScrollProgress - scrollProgress) * 0.08;
+
+      // Web Audio Filter frequency modulation based on scroll
+      if (audioCtx && ambientFilter && !audioMuted) {
+        const targetFreq = 140 + scrollProgress * 400 + Math.abs(mouse.x) * 150;
+        ambientFilter.frequency.setValueAtTime(targetFreq, audioCtx.currentTime);
+      }
+
+      // Morphing calculations
+      const positionAttr = particles.geometry.attributes.position;
+      const arr = positionAttr.array;
+      
+      // Determine morph segments
+      const segment = scrollProgress * 3; // 0 to 3 range
+      const segmentIndex = Math.floor(segment);
+      const progress = segment - segmentIndex;
+
+      let sourceShape = posCloud;
+      let targetShape = posCloud;
+
+      if (segmentIndex === 0) {
+        sourceShape = posCloud;
+        targetShape = posTorus;
+      } else if (segmentIndex === 1) {
+        sourceShape = posTorus;
+        targetShape = posSphere;
+      } else if (segmentIndex >= 2) {
+        sourceShape = posSphere;
+        targetShape = posWave;
+      }
+
+      // Update particle positions
+      for (let i = 0; i < particleCount; i++) {
+        const i3 = i * 3;
+        
+        // 1. Target coordinates morph interpolation
+        let tx = THREE.MathUtils.lerp(sourceShape[i3], targetShape[i3], progress);
+        let ty = THREE.MathUtils.lerp(sourceShape[i3 + 1], targetShape[i3 + 1], progress);
+        let tz = THREE.MathUtils.lerp(sourceShape[i3 + 2], targetShape[i3 + 2], progress);
+        
+        // 2. Add organic noise wave displacement based on segment shape
+        if (segmentIndex === 0) {
+          // Cloud noise: orbital swirling waves
+          tx += Math.sin(time + sourceShape[i3 + 1] * 0.12) * 1.5;
+          ty += Math.cos(time + sourceShape[i3] * 0.1) * 1.2;
+          tz += Math.sin(time + sourceShape[i3 + 2] * 0.15) * 1.0;
+        } else if (segmentIndex === 1) {
+          // Torus: spiral twisting displacement
+          tx += Math.sin(time * 1.5 + sourceShape[i3 + 2] * 0.4) * 0.5;
+          ty += Math.cos(time * 1.5 + sourceShape[i3] * 0.4) * 0.5;
+        } else if (segmentIndex === 2) {
+          // Sphere: pulsing radial oscillation
+          const pulse = Math.sin(time * 2.0 + sourceShape[i3 + 1] * 0.2) * 0.8;
+          tx += tx * pulse * 0.05;
+          ty += ty * pulse * 0.05;
+          tz += tz * pulse * 0.05;
+        } else {
+          // Wave grid: sine surface wave ripple
+          ty += Math.sin(time * 3.0 + sourceShape[i3] * 0.15 + sourceShape[i3 + 2] * 0.15) * 1.8;
+        }
+
+        // 3. Mouse repulsion physics (Tactile swirl)
+        const dx = tx - mouse3D.x;
+        const dy = ty - mouse3D.y;
+        const dz = tz - mouse3D.z;
+        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        
+        const repulsionThreshold = 9.0;
+        if (dist < repulsionThreshold) {
+          const force = (repulsionThreshold - dist) / repulsionThreshold;
+          // Push particles away along the normal direction, adding turbulence
+          tx += (dx / dist) * force * 5.0;
+          ty += (dy / dist) * force * 5.0;
+          tz += (dz / dist) * force * 2.5;
+        }
+
+        // Apply smooth interpolation back to active frame coordinates
+        arr[i3] += (tx - arr[i3]) * 0.12;
+        arr[i3 + 1] += (ty - arr[i3 + 1]) * 0.12;
+        arr[i3 + 2] += (tz - arr[i3 + 2]) * 0.12;
+      }
+      
+      positionAttr.needsUpdate = true;
+
+      // Color transition shift based on scroll progress
+      let col = new THREE.Color(0xec4899); // Pink
+      if (scrollProgress < 0.33) {
+        // Morph Hero to Services: Pink to Purple
+        col.lerp(new THREE.Color(0x8b5cf6), scrollProgress / 0.33);
+      } else if (scrollProgress < 0.66) {
+        // Services to Products: Purple to Cyan
+        col = new THREE.Color(0x8b5cf6);
+        col.lerp(new THREE.Color(0x06b6d4), (scrollProgress - 0.33) / 0.33);
+      } else {
+        // Products to Contact: Cyan to Orange
+        col = new THREE.Color(0x06b6d4);
+        col.lerp(new THREE.Color(0xf59e0b), (scrollProgress - 0.66) / 0.34);
+      }
+      particles.material.color.copy(col);
+
+      // Camera Flythrough Path
+      camera.position.x = Math.sin(scrollProgress * Math.PI * 0.4) * 8;
+      camera.position.y = -scrollProgress * 6;
+      camera.lookAt(0, -scrollProgress * 6, 0);
+
+      // Rotate overall particle mesh slowly
+      particles.rotation.y = time * 0.05;
+
+      renderer.render(scene, camera);
+    }
+
+    // Resize Handler
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+    window.addEventListener('resize', onWindowResize);
+
+    // 7. Load & Compile Guard
+    try {
+      init();
+      animate();
+      
+      // Simulate resource loading for smooth progress bar animation
+      let progress = 0;
+      const loaderProgress = document.getElementById('loader-progress');
+      const interval = setInterval(() => {
+        progress += Math.floor(Math.random() * 25) + 10;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+          setTimeout(() => {
+            const loader = document.getElementById('loader');
+            if (loader) {
+              loader.style.opacity = 0;
+              setTimeout(() => loader.style.display = 'none', 800);
+            }
+          }, 400);
+        }
+        loaderProgress.style.width = progress + '%';
+      }, 80);
+      
+    } catch (error) {
+      console.error("Lusion Engine Init Error:", error);
+      const loader = document.getElementById('loader');
+      if (loader) loader.style.display = 'none';
+    }
+  </script>
+</body>
+
+</html>

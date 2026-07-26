@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, "", "/");
+    }
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>India Soft Solutions (ISS) | OS Console Dashboard</title>
+  <meta name="description" content="India Soft Solutions (ISS) specializes in responsive web development, native iOS & Android mobile apps, UI/UX design, and 24/7 maintenance SLA." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="logo.ico" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Google Fonts: Outfit -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* --- CSS Reset & Variables --- */
+    :root {
+      --bg-dark: #05050a;
+      --bg-card: rgba(10, 8, 28, 0.45);
+      --glass-border: rgba(255, 255, 255, 0.05);
+      --glass-blur: blur(20px);
+      
+      --accent-saffron: #ff6b00;
+      --accent-green: #00e676;
+      --accent-cyan: #00f0ff;
+      --accent-purple: #8b5cf6;
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Outfit', sans-serif;
+      user-select: none;
+    }
+
+    body::-webkit-scrollbar {
+      display: none;
+    }
+    body {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+    }
+
+    /* --- Interactive Video Background --- */
+    .video-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      object-fit: cover;
+      z-index: -2;
+      pointer-events: none;
+    }
+    .video-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: radial-gradient(circle at center, rgba(6, 6, 12, 0.3) 0%, rgba(6, 6, 12, 0.85) 100%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Tech grid overlay */
+    .bg-grid {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 50px 50px;
+      background-position: center;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* --- Viewport & Smooth Scroll Containers --- */
+    #viewport {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+    }
+
+    #scroll-container {
+      width: 100%;
+      position: absolute;
+      top: 0; left: 0;
+      will-change: transform;
+      padding-bottom: 100px;
+    }
+
+    #plasma-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* --- Floating Pill Navbar --- */
+    header {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 1200px;
+      background: rgba(10, 8, 28, 0.5);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 1px rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      padding: 12px 35px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    
+    header img {
+      height: 40px;
+      width: auto;
+    }
+
+    header h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--accent-cyan);
+      text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+    }
+
+    /* --- Layout Section Standards --- */
+    section {
+      padding: 140px 8% 80px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .section-title-wrap {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-tag {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      border: 1px solid currentColor;
+    }
+
+    .section-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: var(--text-main);
+    }
+
+    .section-title span {
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* --- Pattern 1: Hero HUD Dashboard --- */
+    #home {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      padding-top: 180px;
+    }
+
+    .hud-title-box {
+      position: relative;
+      padding: 40px;
+      border-radius: 30px;
+      border: 1px dashed rgba(0, 240, 255, 0.15);
+      background: rgba(6, 6, 12, 0.4);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      max-width: 900px;
+      margin-bottom: 50px;
+    }
+
+    /* HUD Corner Brackets */
+    .hud-bracket {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: var(--accent-cyan);
+      border-style: solid;
+      pointer-events: none;
+    }
+    .hud-bracket.tl { top: 15px; left: 15px; border-width: 2px 0 0 2px; }
+    .hud-bracket.tr { top: 15px; right: 15px; border-width: 2px 2px 0 0; }
+    .hud-bracket.bl { bottom: 15px; left: 15px; border-width: 0 0 2px 2px; }
+    .hud-bracket.br { bottom: 15px; right: 15px; border-width: 0 2px 2px 0; }
+
+    .hud-title-box h2 {
+      font-size: 4rem;
+      line-height: 1.1;
+      font-weight: 800;
+      letter-spacing: -2px;
+      margin-bottom: 20px;
+    }
+    .hud-title-box h2 span {
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hud-title-box p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 30px;
+      line-height: 1.6;
+    }
+
+    /* Telemetry grid */
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      width: 100%;
+      max-width: 900px;
+      margin-top: 20px;
+    }
+
+    .telemetry-item {
+      background: rgba(10, 8, 28, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      padding: 15px;
+      border-radius: 12px;
+      text-align: left;
+      font-family: monospace;
+    }
+    .telemetry-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .telemetry-val {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin-top: 5px;
+    }
+
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      color: #06060c;
+      padding: 16px 36px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1.05rem;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(0, 240, 255, 0.2);
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .hero-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 35px rgba(0, 240, 255, 0.4);
+    }
+
+    /* --- Pattern 2: About Us Terminal Console --- */
+    .terminal-container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      background: #020205;
+      border: 1px solid rgba(0, 240, 255, 0.15);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    .terminal-header {
+      background: #08080f;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .terminal-dots { display: flex; gap: 8px; }
+    .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .terminal-dot.close { background: #ff5f56; }
+    .terminal-dot.minimize { background: #ffbd2e; }
+    .terminal-dot.maximize { background: #27c93f; }
+    .terminal-title { font-family: monospace; font-size: 0.75rem; color: var(--text-muted); }
+
+    .terminal-tabs {
+      display: flex;
+      gap: 15px;
+      padding: 12px 20px;
+      background: #05050b;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .terminal-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: monospace;
+      font-size: 0.85rem;
+      cursor: pointer;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: all 0.3s;
+    }
+    .terminal-tab-btn.active, .terminal-tab-btn:hover {
+      background: rgba(0, 240, 255, 0.08);
+      color: var(--accent-cyan);
+    }
+
+    .terminal-body {
+      padding: 30px;
+      font-family: monospace;
+      color: var(--accent-green);
+      line-height: 1.6;
+      min-height: 280px;
+      font-size: 0.95rem;
+      text-align: left;
+    }
+    .terminal-prompt { color: var(--accent-purple); }
+    .terminal-output { color: var(--text-main); margin-top: 12px; white-space: pre-wrap; }
+    
+    .cursor-blink {
+      display: inline-block;
+      width: 8px;
+      height: 15px;
+      background: var(--accent-green);
+      animation: blink 1.2s step-end infinite;
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+    @keyframes blink {
+      from, to { background-color: transparent; }
+      50% { background-color: var(--accent-green); }
+    }
+
+    /* --- Pattern 3: Services Expandable Accordion --- */
+    .services-flex {
+      display: flex;
+      gap: 25px;
+      width: 100%;
+      height: 380px;
+    }
+
+    .service-flex-card {
+      flex: 1;
+      height: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    .service-flex-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: var(--accent-cyan);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .service-flex-card.active, .service-flex-card:hover {
+      flex: 2.2;
+      border-color: rgba(0, 240, 255, 0.25);
+      box-shadow: 0 20px 40px rgba(0, 240, 255, 0.05);
+    }
+    .service-flex-card.active::before, .service-flex-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-card-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .service-num {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.15);
+      transition: color 0.4s;
+    }
+    .service-flex-card:hover .service-num, .service-flex-card.active .service-num {
+      color: var(--accent-cyan);
+    }
+    .service-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .service-icon-wrapper {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 240, 255, 0.05);
+      border: 1px solid rgba(0, 240, 255, 0.15);
+      border-radius: 12px;
+      padding: 10px;
+      transition: all 0.4s ease;
+      margin: 25px 0;
+      align-self: center;
+    }
+    
+    .service-icon-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      transition: all 0.4s ease;
+    }
+
+    .service-flex-card.active .service-icon-wrapper, .service-flex-card:hover .service-icon-wrapper {
+      background: var(--accent-cyan);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+      border-color: transparent;
+    }
+    .service-flex-card.active .service-icon-wrapper img, .service-flex-card:hover .service-icon-wrapper img {
+      filter: brightness(0);
+    }
+
+    .service-card-body {
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 0.4s ease;
+      margin-top: 20px;
+      visibility: hidden;
+    }
+    .service-flex-card.active .service-card-body, .service-flex-card:hover .service-card-body {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+
+    .service-desc {
+      color: var(--text-muted);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+    
+    .service-specs {
+      margin-top: 25px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      gap: 30px;
+    }
+    .spec-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .spec-label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
+    .spec-val { font-size: 0.85rem; font-weight: 700; color: var(--accent-cyan); margin-top: 3px; }
+
+    /* --- Pattern 4: Products Specimen Deck --- */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 30px;
+      width: 100%;
+    }
+
+    .product-specimen-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      padding: 35px 25px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      min-height: 300px;
+    }
+    .product-specimen-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(139, 92, 246, 0.25);
+      box-shadow: 0 30px 50px rgba(139, 92, 246, 0.08);
+    }
+    .product-specimen-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .product-specimen-card:hover::before { transform: scaleX(1); }
+
+    .product-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .product-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .product-logo-wrap img {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0, 0, 0, 0.3);
+      padding: 4px;
+      object-fit: contain;
+    }
+    .product-info-h {
+      display: flex;
+      flex-direction: column;
+    }
+    .product-card-top h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .product-version {
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .product-status-node {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 10px var(--accent-green);
+    }
+    .product-status-node.offline {
+      background: #475569;
+      box-shadow: none;
+    }
+
+    .product-card-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 25px;
+      min-height: 70px;
+    }
+
+    .product-card-downloads {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 25px;
+    }
+    
+    .dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      color: white;
+      transition: all 0.3s ease;
+    }
+    .dl-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.15);
+      box-shadow: 0 5px 12px currentColor;
+    }
+    .dl-btn.exe { background: rgba(0, 120, 212, 0.15); border: 1px solid #0078d4; color: #0078d4; }
+    .dl-btn.apk { background: rgba(61, 220, 132, 0.15); border: 1px solid #3ddc84; color: #3ddc84; }
+    .dl-btn.dmg { background: rgba(175, 82, 222, 0.15); border: 1px solid #af52de; color: #af52de; }
+    
+    .coming-soon-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 5px 12px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+
+    .product-card-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding-top: 20px;
+    }
+    .product-card-stat {
+      font-family: monospace;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .product-card-stat span { color: var(--accent-purple); font-weight: 700; }
+
+    .visit-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-cyan);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: text-shadow 0.3s;
+    }
+    .visit-link:hover {
+      text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+    }
+
+    /* --- Pattern 5: Hologram Ports Connect --- */
+    .hologram-ports {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-top: 20px;
+    }
+
+    .hologram-port-card {
+      width: 280px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      padding: 45px 25px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      position: relative;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    /* Glowing Hologram Port Base Line */
+    .hologram-port-card::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 15%;
+      width: 70%;
+      height: 3px;
+      background: transparent;
+      filter: blur(4px);
+      transition: all 0.4s ease;
+    }
+
+    .hologram-port-card:hover {
+      transform: translateY(-15px);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 20px 40px rgba(0, 240, 255, 0.1);
+    }
+    .hologram-port-card.call:hover { border-color: #00e676; box-shadow: 0 20px 40px rgba(0, 230, 118, 0.1); }
+    .hologram-port-card.wa:hover { border-color: var(--accent-cyan); box-shadow: 0 20px 40px rgba(0, 240, 255, 0.1); }
+    .hologram-port-card.email:hover { border-color: #ff3366; box-shadow: 0 20px 40px rgba(255, 51, 102, 0.1); }
+
+    .hologram-port-card:hover::after { background: var(--accent-cyan); box-shadow: 0 0 15px var(--accent-cyan); }
+    .hologram-port-card.call:hover::after { background: #00e676; box-shadow: 0 0 15px #00e676; }
+    .hologram-port-card.wa:hover::after { background: var(--accent-cyan); box-shadow: 0 0 15px var(--accent-cyan); }
+    .hologram-port-card.email:hover::after { background: #ff3366; box-shadow: 0 0 15px #ff3366; }
+
+    .hologram-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2.2rem;
+      color: var(--text-muted);
+      margin-bottom: 25px;
+      transition: all 0.4s ease;
+    }
+    .hologram-port-card:hover .hologram-icon {
+      transform: translateY(-5px);
+      color: var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.1);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+    }
+    .hologram-port-card.call:hover .hologram-icon {
+      color: #00e676;
+      background: rgba(0, 230, 118, 0.1);
+      border-color: #00e676;
+      box-shadow: 0 0 20px rgba(0, 230, 118, 0.2);
+    }
+    .hologram-port-card.email:hover .hologram-icon {
+      color: #ff3366;
+      background: rgba(255, 51, 102, 0.1);
+      border-color: #ff3366;
+      box-shadow: 0 0 20px rgba(255, 51, 102, 0.2);
+    }
+
+    .hologram-port-card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+    .hologram-port-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .response-note {
+      text-align: center;
+      margin-top: 50px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* --- Footer --- */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      background: rgba(5, 5, 10, 0.85);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+    }
+
+    /* --- Responsive Adjustments --- */
+    @media (max-width: 992px) {
+      .services-flex {
+        flex-direction: column;
+        height: auto;
+      }
+      .service-flex-card {
+        width: 100%;
+        height: auto;
+        min-height: 180px;
+      }
+      .service-flex-card.active, .service-flex-card:hover {
+        flex: 1; /* Disable width expand on mobile */
+      }
+      .service-card-body {
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+        margin-top: 15px;
+      }
+      .telemetry-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hologram-port-card {
+        width: 100%;
+        max-width: 320px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        width: 95%;
+        padding: 10px 20px;
+        flex-direction: column;
+        border-radius: 20px;
+      }
+      nav {
+        margin-top: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+      }
+      .section-title {
+        font-size: 2.2rem;
+      }
+      .hud-title-box h2 {
+        font-size: 2.8rem;
+      }
+      .telemetry-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Scroll-controlled video background -->
+  <video id="scroll-video" muted playsinline preload="auto" class="video-bg">
+    <source src="robot.mp4" type="video/mp4" />
+  </video>
+  <div class="video-overlay"></div>
+
+  <!-- Ambient Grid Layer (Above video, below cards) -->
+  <div class="bg-grid"></div>
+
+  <!-- Plasma Cursor Trail Canvas -->
+  <canvas id="plasma-canvas"></canvas>
+
+  <!-- Fixed Header Navbar -->
+  <header>
+    <a href="#home" class="logo-container">
+      <img src="logo.png" alt="India Soft Solutions" />
+      <h1>India Soft Solutions</h1>
+    </a>
+    <nav>
+      <a href="#home" class="active">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#products">Products</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- Viewport wrapper for Inertia Scrolling -->
+  <div id="viewport">
+    <div id="scroll-container">
+
+      <!-- Section 1: Hero HUD Dashboard -->
+      <section id="home">
+        <div class="hud-title-box">
+          <div class="hud-bracket tl"></div>
+          <div class="hud-bracket tr"></div>
+          <div class="hud-bracket bl"></div>
+          <div class="hud-bracket br"></div>
+          
+          <h2>Welcome to<br><span>India Soft Solutions</span></h2>
+          <p>We design and develop powerful digital experiences — from mobile apps to web platforms — to help businesses grow with technology.</p>
+          
+          <a href="#services" class="hero-btn">Explore Our Work <i class="fas fa-arrow-right"></i></a>
+        </div>
+        
+        <div class="telemetry-grid">
+          <div class="telemetry-item">
+            <div class="telemetry-label">SYSTEM_CORE</div>
+            <div class="telemetry-val">ACTIVE</div>
+          </div>
+          <div class="telemetry-item">
+            <div class="telemetry-label">SLA_UPTIME</div>
+            <div class="telemetry-val">99.99%</div>
+          </div>
+          <div class="telemetry-item">
+            <div class="telemetry-label">OS_RELEASES</div>
+            <div class="telemetry-val">v3.5.0</div>
+          </div>
+          <div class="telemetry-item">
+            <div class="telemetry-label">SYS_LATENCY</div>
+            <div class="telemetry-val">12ms</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: About Us Terminal Console -->
+      <section id="about">
+        <div class="section-title-wrap">
+          <span class="section-tag" style="color: var(--accent-green); border-color: rgba(0, 230, 118, 0.3);">OS Console</span>
+          <h2 class="section-title">Querying <span>Our Profile</span></h2>
+        </div>
+        
+        <div class="terminal-container">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <div class="terminal-dot close"></div>
+              <div class="terminal-dot minimize"></div>
+              <div class="terminal-dot maximize"></div>
+            </div>
+            <div class="terminal-title">iss-os@root: ~/about</div>
+          </div>
+          
+          <div class="terminal-tabs">
+            <button class="terminal-tab-btn active" data-tab="who_we_are">$ cat who_we_are.txt</button>
+            <button class="terminal-tab-btn" data-tab="mission">$ cat mission.txt</button>
+            <button class="terminal-tab-btn" data-tab="vision">$ cat vision.txt</button>
+          </div>
+          
+          <div class="terminal-body">
+            <span class="terminal-prompt">iss-os@root:~/about$</span>
+            <div class="terminal-output" id="terminal-output">who_we_are content typing...<span class="cursor-blink"></span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Our Services Accordion Deck -->
+      <section id="services">
+        <div class="section-title-wrap">
+          <span class="section-tag" style="color: var(--accent-cyan); border-color: rgba(0, 240, 255, 0.3);">Services</span>
+          <h2 class="section-title">Tech <span>Capabilities</span></h2>
+        </div>
+        
+        <div class="services-flex">
+          <div class="service-flex-card active">
+            <div class="service-card-header">
+              <div class="service-num">01</div>
+              <h3 class="service-title">Web Development</h3>
+            </div>
+            <div class="service-icon-wrapper">
+              <img src="www.png" alt="Web Development" />
+            </div>
+            <div class="service-card-body">
+              <p class="service-desc">Custom websites with responsive design, modern frameworks, and SEO optimization.</p>
+              <div class="service-specs">
+                <div class="spec-item">
+                  <div class="spec-label">Engine</div>
+                  <div class="spec-val">NextJS / React</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-label">Serverless</div>
+                  <div class="spec-val">Vercel / AWS</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="service-flex-card">
+            <div class="service-card-header">
+              <div class="service-num">02</div>
+              <h3 class="service-title">Mobile Apps</h3>
+            </div>
+            <div class="service-icon-wrapper">
+              <img src="appDev.png" alt="Mobile Apps" />
+            </div>
+            <div class="service-card-body">
+              <p class="service-desc">Android and iOS mobile app solutions with native and cross-platform development.</p>
+              <div class="service-specs">
+                <div class="spec-item">
+                  <div class="spec-label">Framework</div>
+                  <div class="spec-val">Flutter / Native</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-label">Sync</div>
+                  <div class="spec-val">gRPC / Socket</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="service-flex-card">
+            <div class="service-card-header">
+              <div class="service-num">03</div>
+              <h3 class="service-title">UI/UX Design</h3>
+            </div>
+            <div class="service-icon-wrapper">
+              <img src="ux-ui.jpg" alt="UI/UX Design" />
+            </div>
+            <div class="service-card-body">
+              <p class="service-desc">Beautiful and user-friendly interface designs that enhance user experience.</p>
+              <div class="service-specs">
+                <div class="spec-item">
+                  <div class="spec-label">Design</div>
+                  <div class="spec-val">Figma / HSL</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-label">Prototype</div>
+                  <div class="spec-val">Interactive</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="service-flex-card">
+            <div class="service-card-header">
+              <div class="service-num">04</div>
+              <h3 class="service-title">Support &amp; SLA</h3>
+            </div>
+            <div class="service-icon-wrapper">
+              <img src="Support___Maintenance.png" alt="Support &amp; SLA" />
+            </div>
+            <div class="service-card-body">
+              <p class="service-desc">24/7 technical support and regular maintenance for all your digital products.</p>
+              <div class="service-specs">
+                <div class="spec-item">
+                  <div class="spec-label">Response</div>
+                  <div class="spec-val">&lt; 15 mins</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-label">Coverage</div>
+                  <div class="spec-val">24/7 Hotline</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Our Products Specimen Grid -->
+      <section id="products">
+        <div class="section-title-wrap">
+          <span class="section-tag" style="color: var(--accent-purple); border-color: rgba(139, 92, 246, 0.3);">Ecosystem</span>
+          <h2 class="section-title">Software <span>Specimens</span></h2>
+        </div>
+        
+        <div class="product-grid">
+          <!-- Product 1 (Active) -->
+          <div class="product-specimen-card">
+            <div>
+              <div class="product-card-top">
+                <div class="product-logo-wrap">
+                  <img src="nestlogo.png" alt="Nest Logo" />
+                  <div class="product-info-h">
+                    <h3>Nest Communication</h3>
+                    <div class="product-version">v2.1.0</div>
+                  </div>
+                </div>
+                <div class="product-status-node"></div>
+              </div>
+              <p class="product-card-desc">Video Communication App, supporting Meeting Creation, Joining via ID, and live camera/mic control with a clean, modern UI.</p>
+            </div>
+            <div>
+              <div class="product-card-downloads">
+                <a href="https://github.com/jayantadutta-code/nestEXEfile/releases/download/v2.1.0/nest_communication.zip" class="dl-btn exe"><i class="fab fa-windows"></i> .exe</a>
+                <a href="https://github.com/jayantadutta-code/nestAPKfile/releases/download/v2.1.0/app-release.apk" target="_blank" class="dl-btn apk"><i class="fab fa-android"></i> .apk</a>
+                <a href="https://github.com/jayantadutta-code/nestDMGfile/releases/download/v2.1.0/Nest.Communication.app.zip" target="_blank" class="dl-btn dmg"><i class="fab fa-apple"></i> .dmg</a>
+              </div>
+              <div class="product-card-bottom">
+                <div class="product-card-stat">STATUS: <span>ONLINE</span></div>
+                <a href="https://nestcommunication.vercel.app/" target="_blank" class="visit-link"><i class="fas fa-external-link-alt"></i> Visit</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Product 2 -->
+          <div class="product-specimen-card">
+            <div>
+              <div class="product-card-top">
+                <div class="product-logo-wrap">
+                  <img src="LeaseVault.png" alt="LeaseVault" />
+                  <div class="product-info-h">
+                    <h3>LeaseVault</h3>
+                    <div class="product-version">v1.0.0</div>
+                  </div>
+                </div>
+                <div class="product-status-node"></div>
+              </div>
+              <p class="product-card-desc">Rental Management App, it is a Flutter-based rental management application powered by a Supabase backend that streamlines the renting process for landlords (lessors) and tenants (lessees).</p>
+            </div>
+            <div>
+              <div class="product-card-downloads">
+                <a href="https://github.com/jayantadutta-code/LeaseVaultEXE/releases/download/v1.0.0/lease_vault.zip" class="dl-btn exe"><i class="fab fa-windows"></i> .exe</a>
+                <a href="https://github.com/jayantadutta-code/LeaseVaultAPK/releases/download/v1.0.0/app-release.apk" target="_blank" class="dl-btn apk"><i class="fab fa-android"></i> .apk</a>
+                <a href="https://github.com/jayantadutta-code/LeaseVaultDMG/releases/download/v1.0.0/LeaseVault.app.zip" target="_blank" class="dl-btn dmg"><i class="fab fa-apple"></i> .dmg</a>
+              </div>
+              <div class="product-card-bottom">
+                <div class="product-card-stat">STATUS: <span>ONLINE</span></div>
+                <a href="https://leasevaultweb.netlify.app" target="_blank" class="visit-link"><i class="fas fa-external-link-alt"></i> Visit</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 3 -->
+          <div class="product-specimen-card">
+            <div>
+              <div class="product-card-top">
+                <div class="product-logo-wrap">
+                  <img src="logo.png" alt="Logo" />
+                  <div class="product-info-h">
+                    <h3>SecureVault</h3>
+                    <div class="product-version">v1.0.0-beta</div>
+                  </div>
+                </div>
+                <div class="product-status-node offline"></div>
+              </div>
+              <p class="product-card-desc">Encrypted password manager using end-to-end local zero-knowledge protocols.</p>
+            </div>
+            <div>
+              <div class="product-card-downloads">
+                <span class="coming-soon-badge">Coming Soon</span>
+              </div>
+              <div class="product-card-bottom">
+                <div class="product-card-stat">STATUS: <span>QUEUED</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 4 -->
+          <div class="product-specimen-card">
+            <div>
+              <div class="product-card-top">
+                <div class="product-logo-wrap">
+                  <img src="logo.png" alt="Logo" />
+                  <div class="product-info-h">
+                    <h3>DataFlow</h3>
+                    <div class="product-version">v1.0.0-beta</div>
+                  </div>
+                </div>
+                <div class="product-status-node offline"></div>
+              </div>
+              <p class="product-card-desc">Real-time data sync &amp; analytics dashboard with distributed server aggregation.</p>
+            </div>
+            <div>
+              <div class="product-card-downloads">
+                <span class="coming-soon-badge">Coming Soon</span>
+              </div>
+              <div class="product-card-bottom">
+                <div class="product-card-stat">STATUS: <span>QUEUED</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 5 -->
+          <div class="product-specimen-card">
+            <div>
+              <div class="product-card-top">
+                <div class="product-logo-wrap">
+                  <img src="logo.png" alt="Logo" />
+                  <div class="product-info-h">
+                    <h3>CloudNest</h3>
+                    <div class="product-version">v1.0.0-beta</div>
+                  </div>
+                </div>
+                <div class="product-status-node offline"></div>
+              </div>
+              <p class="product-card-desc">Cloud storage &amp; file sharing platform with highly optimized chunk upload paths.</p>
+            </div>
+            <div>
+              <div class="product-card-downloads">
+                <span class="coming-soon-badge">Coming Soon</span>
+              </div>
+              <div class="product-card-bottom">
+                <div class="product-card-stat">STATUS: <span>QUEUED</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 6 -->
+          <div class="product-specimen-card">
+            <div>
+              <div class="product-card-top">
+                <div class="product-logo-wrap">
+                  <img src="logo.png" alt="Logo" />
+                  <div class="product-info-h">
+                    <h3>SwiftCart</h3>
+                    <div class="product-version">v1.0.0-beta</div>
+                  </div>
+                </div>
+                <div class="product-status-node offline"></div>
+              </div>
+              <p class="product-card-desc">E-commerce platform for SMEs featuring dynamic payment gateways and instant receipts.</p>
+            </div>
+            <div>
+              <div class="product-card-downloads">
+                <span class="coming-soon-badge">Coming Soon</span>
+              </div>
+              <div class="product-card-bottom">
+                <div class="product-card-stat">STATUS: <span>QUEUED</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 7 -->
+          <div class="product-specimen-card">
+            <div>
+              <div class="product-card-top">
+                <div class="product-logo-wrap">
+                  <img src="logo.png" alt="Logo" />
+                  <div class="product-info-h">
+                    <h3>HealthTrack</h3>
+                    <div class="product-version">v1.0.0-beta</div>
+                  </div>
+                </div>
+                <div class="product-status-node offline"></div>
+              </div>
+              <p class="product-card-desc">Patient health monitoring system with integration for smart IoT pulse devices.</p>
+            </div>
+            <div>
+              <div class="product-card-downloads">
+                <span class="coming-soon-badge">Coming Soon</span>
+              </div>
+              <div class="product-card-bottom">
+                <div class="product-card-stat">STATUS: <span>QUEUED</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 8 -->
+          <div class="product-specimen-card">
+            <div>
+              <div class="product-card-top">
+                <div class="product-logo-wrap">
+                  <img src="logo.png" alt="Logo" />
+                  <div class="product-info-h">
+                    <h3>EduSmart</h3>
+                    <div class="product-version">v1.0.0-beta</div>
+                  </div>
+                </div>
+                <div class="product-status-node offline"></div>
+              </div>
+              <p class="product-card-desc">AI-powered learning management portal with active quiz grading structures.</p>
+            </div>
+            <div>
+              <div class="product-card-downloads">
+                <span class="coming-soon-badge">Coming Soon</span>
+              </div>
+              <div class="product-card-bottom">
+                <div class="product-card-stat">STATUS: <span>QUEUED</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 9 -->
+          <div class="product-specimen-card">
+            <div>
+              <div class="product-card-top">
+                <div class="product-logo-wrap">
+                  <img src="logo.png" alt="Logo" />
+                  <div class="product-info-h">
+                    <h3>FinSecure</h3>
+                    <div class="product-version">v1.0.0-beta</div>
+                  </div>
+                </div>
+                <div class="product-status-node offline"></div>
+              </div>
+              <p class="product-card-desc">Blockchain-based financial security layer safeguarding ledger transactions.</p>
+            </div>
+            <div>
+              <div class="product-card-downloads">
+                <span class="coming-soon-badge">Coming Soon</span>
+              </div>
+              <div class="product-card-bottom">
+                <div class="product-card-stat">STATUS: <span>QUEUED</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 10 -->
+          <div class="product-specimen-card">
+            <div>
+              <div class="product-card-top">
+                <div class="product-logo-wrap">
+                  <img src="logo.png" alt="Logo" />
+                  <div class="product-info-h">
+                    <h3>FinSecure V2</h3>
+                    <div class="product-version">v2.0.0-alpha</div>
+                  </div>
+                </div>
+                <div class="product-status-node offline"></div>
+              </div>
+              <p class="product-card-desc">Secondary ledger security node with real-time multi-sig verification keys.</p>
+            </div>
+            <div>
+              <div class="product-card-downloads">
+                <span class="coming-soon-badge">Coming Soon</span>
+              </div>
+              <div class="product-card-bottom">
+                <div class="product-card-stat">STATUS: <span>QUEUED</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Contact Hologram Connect -->
+      <section id="contact">
+        <div class="section-title-wrap">
+          <span class="section-tag" style="color: var(--text-main); border-color: rgba(255, 255, 255, 0.3);">Contact</span>
+          <h2 class="section-title">Hologram <span>Link Ports</span></h2>
+        </div>
+        
+        <div class="hologram-ports">
+          <a href="tel:+918250227952" class="hologram-port-card call">
+            <div class="hologram-icon"><i class="fas fa-phone-alt"></i></div>
+            <h3>CALL PORT</h3>
+            <p>+91 8250227952</p>
+          </a>
+          <a href="https://wa.me/918250227952" target="_blank" class="hologram-port-card wa">
+            <div class="hologram-icon"><i class="fab fa-whatsapp"></i></div>
+            <h3>WHATSAPP</h3>
+            <p>Live Transmit 24/7</p>
+          </a>
+          <a href="mailto:indiasoftsolutions2025@gmail.com" class="hologram-port-card email">
+            <div class="hologram-icon"><i class="fas fa-envelope"></i></div>
+            <h3>EMAIL PORT</h3>
+            <p style="word-break: break-all;">indiasoftsolutions2025@gmail.com</p>
+          </a>
+        </div>
+        
+        <p class="response-note font-mono">SYSTEM LOG: Channels online. Response latency estimated &lt; 3 mins.</p>
+      </section>
+
+      <!-- Footer -->
+      <footer>
+        <p>© 2026 India Soft Solutions | All Rights Reserved</p>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- Smooth Scroll, Plasma Cursor, and Terminal Logic -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      
+      // --- 1. JS Damped Inertia Scrolling ---
+      const body = document.body;
+      const viewport = document.getElementById("viewport");
+      const scrollContainer = document.getElementById("scroll-container");
+      
+      let targetScroll = 0;
+      let currentScroll = 0;
+      const scrollEase = 0.08;
+
+      function updateHeight() {
+        const height = scrollContainer.getBoundingClientRect().height;
+        body.style.height = `${height}px`;
+      }
+      
+      window.addEventListener("resize", updateHeight);
+      window.addEventListener("load", updateHeight);
+      updateHeight();
+      
+      setInterval(updateHeight, 1000);
+
+      window.addEventListener("scroll", () => {
+        targetScroll = window.scrollY;
+      });
+
+      // --- 2. Scroll-Controlled Video Background ---
+      const video = document.getElementById("scroll-video");
+      let videoDuration = 0;
+      let targetTime = 0;
+      let lastSoughtTime = -1;
+      let isSeeking = false;
+      
+      video.addEventListener("loadedmetadata", () => {
+        videoDuration = video.duration;
+        updateVideo(currentScroll);
+      });
+      
+      if (video.readyState >= 1) {
+        videoDuration = video.duration;
+      }
+
+      function updateVideo(scrollVal) {
+        if (!videoDuration) return;
+        const maxScroll = body.getBoundingClientRect().height - window.innerHeight;
+        if (maxScroll <= 0) return;
+        
+        const scrollPercent = Math.max(0, Math.min(1, scrollVal / maxScroll));
+        targetTime = Math.max(0, Math.min(videoDuration - 0.02, scrollPercent * videoDuration));
+        
+        if (!isSeeking) {
+          seekToTarget();
+        }
+      }
+
+      function seekToTarget() {
+        if (Math.abs(targetTime - lastSoughtTime) > 0.01) {
+          isSeeking = true;
+          lastSoughtTime = targetTime;
+          video.currentTime = targetTime;
+        }
+      }
+
+      video.addEventListener("seeked", () => {
+        isSeeking = false;
+        seekToTarget();
+      });
+
+      // --- 3. Animation Update Loop ---
+      function scrollLoop() {
+        currentScroll += (targetScroll - currentScroll) * scrollEase;
+        scrollContainer.style.transform = `translate3d(0, ${-currentScroll}px, 0)`;
+
+        updateVideo(currentScroll);
+        updateActiveNav();
+
+        requestAnimationFrame(scrollLoop);
+      }
+      requestAnimationFrame(scrollLoop);
+
+      // --- 4. Intercept Nav Anchor Clicks ---
+      document.querySelectorAll("nav a, .hero-btn").forEach(link => {
+        link.addEventListener("click", function(e) {
+          const href = this.getAttribute("href");
+          if (href && href.startsWith("#")) {
+            e.preventDefault();
+            const targetElement = document.querySelector(href);
+            if (targetElement) {
+              const rect = targetElement.getBoundingClientRect();
+              const offsetTop = rect.top + currentScroll;
+              window.scrollTo({
+                top: offsetTop,
+                behavior: "auto"
+              });
+            }
+          }
+        });
+      });
+
+      // --- 5. Active Section Highlighter ---
+      const sections = document.querySelectorAll("section");
+      const navLinks = document.querySelectorAll("nav a");
+
+      function updateActiveNav() {
+        let activeId = "home";
+        sections.forEach(sec => {
+          const secTop = sec.getBoundingClientRect().top + currentScroll;
+          if (currentScroll >= secTop - window.innerHeight / 3) {
+            activeId = sec.getAttribute("id");
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove("active");
+          if (link.getAttribute("href") === `#${activeId}`) {
+            link.classList.add("active");
+          }
+        });
+      }
+
+      // --- 6. About Section Command Terminal Typing Script ---
+      const termOutputs = {
+        who_we_are: `ISS-OS v3.5.0: /about/who_we_are.txt\n\nIndia Soft Solutions (ISS) is a creative and technology-driven SaaS company focused on delivering modern, high-quality digital solutions for businesses and individuals. We specialize in web development, mobile apps, and customized software designed to enhance user experience and business growth. With innovation, precision, and customer satisfaction at our core, ISS transforms ideas into impactful digital realities.`,
+        mission: `ISS-OS v3.5.0: /about/mission.txt\n\nTo provide reliable, scalable, and high-performance digital solutions that empower clients to reach new heights through technology and innovation. We strive to blend creativity with technical excellence, ensuring every project reflects quality, precision, and long-term value. Our mission is to help businesses evolve and stay ahead in an ever-changing digital world.`,
+        vision: `ISS-OS v3.5.0: /about/vision.txt\n\nTo be a global leader in digital innovation — inspiring change through smart technology, sustainable growth, and creative transformation. We envision a connected world where every business, regardless of size, can harness the power of technology to thrive, innovate, and make a positive impact on society.`
+      };
+
+      let typingTimer = null;
+      function typeTerminal(key) {
+        const outputElement = document.getElementById("terminal-output");
+        if (!outputElement) return;
+
+        if (typingTimer) clearInterval(typingTimer);
+        
+        outputElement.innerHTML = "";
+        const text = termOutputs[key] || "";
+        let i = 0;
+
+        typingTimer = setInterval(() => {
+          if (i < text.length) {
+            if (text.charAt(i) === '\n') {
+              outputElement.innerHTML += '<br>';
+            } else {
+              outputElement.innerHTML += text.charAt(i);
+            }
+            i++;
+          } else {
+            clearInterval(typingTimer);
+            outputElement.innerHTML += '<span class="cursor-blink"></span>';
+          }
+        }, 12);
+      }
+
+      document.querySelectorAll(".terminal-tab-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+          document.querySelectorAll(".terminal-tab-btn").forEach(b => b.classList.remove("active"));
+          this.classList.add("active");
+          typeTerminal(this.getAttribute("data-tab"));
+        });
+      });
+
+      // Initial trigger
+      typeTerminal("who_we_are");
+
+      // --- 7. Services Hover Accordion Card Toggle ---
+      document.querySelectorAll(".service-flex-card").forEach(card => {
+        card.addEventListener("mouseenter", function() {
+          document.querySelectorAll(".service-flex-card").forEach(c => c.classList.remove("active"));
+          this.classList.add("active");
+        });
+      });
+
+      // --- 8. Plasma Cursor Trail Engine ---
+      const canvas = document.getElementById("plasma-canvas");
+      const ctx = canvas.getContext("2d");
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      let particles = [];
+      let mouse = { x: null, y: null, active: false };
+
+      window.addEventListener("mousemove", (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        mouse.active = true;
+
+        for (let i = 0; i < 4; i++) {
+          particles.push({
+            x: e.clientX,
+            y: e.clientY,
+            vx: (Math.random() - 0.5) * 3.5,
+            vy: (Math.random() - 0.5) * 3.5 - 0.5,
+            size: Math.random() * 8 + 4,
+            hue: (Date.now() / 12 + Math.random() * 30) % 360,
+            alpha: 1,
+            decay: Math.random() * 0.02 + 0.015
+          });
+        }
+      });
+
+      window.addEventListener("mouseout", () => {
+        mouse.active = false;
+      });
+
+      setInterval(() => {
+        if (mouse.active && mouse.x !== null) {
+          particles.push({
+            x: mouse.x + (Math.random() - 0.5) * 10,
+            y: mouse.y + (Math.random() - 0.5) * 10,
+            vx: (Math.random() - 0.5) * 1.5,
+            vy: -Math.random() * 1.2 - 0.3,
+            size: Math.random() * 5 + 2,
+            hue: (Date.now() / 12) % 360,
+            alpha: 0.8,
+            decay: 0.02
+          });
+        }
+      }, 80);
+
+      function drawPlasma() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.globalCompositeOperation = "screen";
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha -= p.decay;
+          p.size *= 0.98;
+
+          if (p.alpha <= 0 || p.size <= 0.3) {
+            particles.splice(i, 1);
+            continue;
+          }
+
+          ctx.beginPath();
+          let grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 2.2);
+          grad.addColorStop(0, `hsla(${p.hue}, 100%, 75%, ${p.alpha})`);
+          grad.addColorStop(0.35, `hsla(${(p.hue + 25) % 360}, 100%, 55%, ${p.alpha * 0.8})`);
+          grad.addColorStop(1, `hsla(${(p.hue + 50) % 360}, 100%, 30%, 0)`);
+          
+          ctx.fillStyle = grad;
+          ctx.arc(p.x, p.y, p.size * 2.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        requestAnimationFrame(drawPlasma);
+      }
+      requestAnimationFrame(drawPlasma);
+
+    });
+  </script>
+</body>
+</html>

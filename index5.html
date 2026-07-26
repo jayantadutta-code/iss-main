@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, "", "/");
+    }
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>India Soft Solutions (ISS)</title>
+
+  <!-- ✅ Favicon -->
+  <link rel="icon" type="image/x-icon" href="logo.ico" />
+
+  <!-- ✅ Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* Fix anchor scroll offset for fixed header */
+    :target {
+      scroll-margin-top: 80px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+      user-select: none;
+    }
+
+    body {
+      color: white;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      background-color: #000;
+    }
+
+    /* Hide scrollbar for all devices */
+    body::-webkit-scrollbar {
+      display: none;
+    }
+    body {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    html {
+      overflow-x: hidden;
+    }
+
+    img {
+      -webkit-user-drag: none;
+      pointer-events: none;
+    }
+
+    /* ===== Background Video ===== */
+    .video-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: -1;
+    }
+
+    /* ===== Navbar ===== */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(0, 0, 0, 0.4);
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+      padding: 12px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      transition: all 0.4s ease;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+    }
+
+    header h1 {
+      font-size: 1.8em;
+      color: #fff;
+      font-weight: 700;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+    }
+
+    header img {
+      height: 70px;
+      margin-right: 10px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: white;
+      margin: 0 15px;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #f97316;
+    }
+
+    /* ===== Hero Section ===== */
+    #home {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+      position: relative;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    #home.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #home h1 {
+      font-size: 3em;
+      margin-bottom: 15px;
+      text-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+    }
+
+    #home p {
+      font-size: 1.2em;
+      max-width: 650px;
+      margin-bottom: 30px;
+      color: #ddd;
+    }
+
+    #home h1 span {
+      color: red;
+    }
+
+    .home-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 12px 30px;
+      border-radius: 50px;
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .home-btn:hover {
+      background: rgba(249, 115, 22, 0.3);
+      transform: scale(1.05);
+    }
+
+    /* ===== Glass Section Base ===== */
+    section {
+      padding: 140px 10% 100px;
+      position: relative;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    section.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    section h2 {
+      text-align: center;
+      font-size: 2.2em;
+      color: #f97316;
+      margin-bottom: 50px;
+      text-shadow: 0 0 10px rgba(249, 115, 22, 0.4);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s;
+    }
+
+    section.animated h2 {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 25px 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+      transition: transform 0.4s ease, background 0.4s ease, opacity 0.8s ease, transform 0.8s ease;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    section.animated .glass-card {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .glass-card:hover {
+      transform: translateY(-8px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* ===== About Section ===== */
+    #about .about-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
+    }
+
+    #about .about-box {
+      transition-delay: 0.3s;
+    }
+    #about .about-box:nth-child(2) {
+      transition-delay: 0.5s;
+    }
+    #about .about-box:nth-child(3) {
+      transition-delay: 0.7s;
+    }
+
+    #about .about-box h3 {
+      color: #f97316;
+      margin-bottom: 10px;
+      font-size: 1.3em;
+      text-align: center;
+      position: relative;
+      padding-bottom: 12px;
+    }
+
+    #about .about-box h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background: linear-gradient(to right, #f97316, #ea580c);
+      border-radius: 2px;
+    }
+
+    #about .about-box p {
+      color: #fff;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    /* ===== Services Section — Grid with wrap ===== */
+    #services .services-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      text-align: center;
+    }
+
+    /* Service Card Base */
+    .service-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 40px 25px;
+      min-height: 280px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.4s ease, opacity 0.8s ease, transform 0.8s ease;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    #services.animated .service-card:nth-child(1) {
+      transition-delay: 0.3s;
+    }
+    #services.animated .service-card:nth-child(2) {
+      transition-delay: 0.5s;
+    }
+    #services.animated .service-card:nth-child(3) {
+      transition-delay: 0.7s;
+    }
+    #services.animated .service-card:nth-child(4) {
+      transition-delay: 0.9s;
+    }
+    #services.animated .service-card {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .service-card .icon {
+      margin-bottom: 20px;
+      display: block;
+      text-align: center;
+    }
+
+    .service-card .icon img {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .service-card h3 {
+      color: #f97316;
+      margin-bottom: 10px;
+      font-size: 1.5em;
+      position: relative;
+      padding-bottom: 12px;
+    }
+
+    .service-card h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background: linear-gradient(to right, #f97316, #ea580c);
+      border-radius: 2px;
+    }
+
+    .service-card p {
+      color: #fff;
+      line-height: 1.6;
+      font-size: 1.05em;
+    }
+
+    .service-card:hover {
+      transform: translateY(-8px);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    /* ===== Products Section ===== */
+    #products {
+      padding: 140px 5% 120px;
+      position: relative;
+      min-height: auto;
+      overflow: hidden;
+    }
+
+    #products h2 {
+      text-align: center;
+      font-size: 2.5em;
+      color: #f97316;
+      margin-bottom: 40px;
+      text-shadow: 0 0 15px rgba(249, 115, 22, 0.5);
+    }
+
+    .product-card-wrapper {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      border-radius: 24px;
+    }
+
+    .product-card {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border-radius: 24px;
+      padding: 30px 20px 20px 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: transform 0.9s cubic-bezier(0.23, 1, 0.32, 1),
+                  opacity 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+      will-change: transform, opacity;
+      transform: translateX(100%);
+      opacity: 0;
+    }
+
+    #products.animated .product-card {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    #products:not(.animated) .product-card {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+
+    .product-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 16px;
+    }
+
+    .product-table {
+      width: 100%;
+      min-width: 1000px;
+      border-collapse: collapse;
+      font-size: 0.9em;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .product-table thead {
+      background: rgba(249, 115, 22, 0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 2px solid rgba(249, 115, 22, 0.25);
+    }
+
+    .product-table thead th {
+      padding: 16px 12px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.85em;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #f97316;
+      white-space: nowrap;
+    }
+
+    .product-table thead th:first-child {
+      padding-left: 18px;
+    }
+
+    .product-table tbody tr {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      transition: background 0.25s ease;
+    }
+
+    .product-table tbody tr:hover {
+      background: rgba(249, 115, 22, 0.07);
+    }
+
+    .product-table tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    .product-table tbody td {
+      padding: 14px 12px;
+      vertical-align: middle;
+      line-height: 1.4;
+    }
+
+    .product-table tbody td:first-child {
+      padding-left: 18px;
+      font-weight: 600;
+      color: #f97316;
+    }
+
+    .product-table .logo-cell {
+      width: 60px;
+      text-align: center;
+    }
+
+    .product-table .logo-cell img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 4px;
+      display: block;
+    }
+
+    .product-table .name-cell {
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .product-table .desc-cell {
+      font-size: 0.85em;
+      color: #ccc;
+      max-width: 180px;
+    }
+
+    .product-table .dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: 0.75em;
+      font-weight: 600;
+      text-decoration: none;
+      color: #fff;
+      transition: all 0.25s ease;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .product-table .dl-btn i {
+      font-size: 0.9em;
+    }
+
+    .product-table .dl-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    }
+
+    .product-table .dl-btn.exe {
+      background: rgba(0, 120, 212, 0.85);
+    }
+    .product-table .dl-btn.exe:hover {
+      background: rgba(0, 120, 212, 1);
+    }
+
+    .product-table .dl-btn.apk {
+      background: rgba(61, 220, 132, 0.85);
+    }
+    .product-table .dl-btn.apk:hover {
+      background: rgba(61, 220, 132, 1);
+    }
+
+    .product-table .dl-btn.dmg {
+      background: rgba(175, 82, 222, 0.85);
+    }
+    .product-table .dl-btn.dmg:hover {
+      background: rgba(175, 82, 222, 1);
+    }
+
+    .product-table .visit-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #f97316;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.8em;
+      transition: color 0.25s, transform 0.25s;
+      white-space: nowrap;
+    }
+
+    .product-table .visit-link i {
+      font-size: 0.85em;
+    }
+
+    .product-table .visit-link:hover {
+      color: #ffaa33;
+      transform: translateX(3px);
+    }
+
+    .product-table .coming-soon-tag {
+      font-size: 0.7em;
+      color: #888;
+      font-style: italic;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    /* ===== Contact Section ===== */
+    #contact {
+      padding: 140px 10% 100px;
+      position: relative;
+    }
+
+    #contact h2 {
+      text-align: center;
+      font-size: 2.2em;
+      color: #f97316;
+      margin-bottom: 50px;
+      text-shadow: 0 0 10px rgba(249, 115, 22, 0.4);
+    }
+
+    .contact-subtitle {
+      font-size: 1.1em;
+      color: #fff;
+      margin-bottom: 50px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s;
+    }
+
+    #contact.animated .contact-subtitle {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .contact-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .contact-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 220px;
+      height: 220px;
+      border-radius: 20px;
+      text-decoration: none;
+      color: white;
+      font-weight: 600;
+      font-size: 1.2em;
+      transition: all 0.4s ease;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    #contact.animated .contact-btn:nth-child(1) {
+      transition: all 0.4s ease, opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s;
+    }
+    #contact.animated .contact-btn:nth-child(2) {
+      transition: all 0.4s ease, opacity 0.8s ease 0.6s, transform 0.8s ease 0.6s;
+    }
+    #contact.animated .contact-btn:nth-child(3) {
+      transition: all 0.4s ease, opacity 0.8s ease 0.8s, transform 0.8s ease 0.8s;
+    }
+    #contact.animated .contact-btn {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .contact-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: -1;
+    }
+
+    .contact-btn i {
+      font-size: 60px;
+      margin-bottom: 15px;
+      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
+    }
+
+    .contact-btn span {
+      margin-top: 5px;
+      font-size: 1em;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    .contact-btn .contact-detail {
+      font-size: 0.85em;
+      opacity: 0.9;
+      margin-top: 8px;
+      font-weight: 400;
+    }
+
+    .contact-btn.call {
+      background: linear-gradient(135deg, rgba(37, 211, 102, 0.9), rgba(18, 140, 126, 0.9));
+    }
+    .contact-btn.whatsapp {
+      background: linear-gradient(135deg, rgba(77, 16, 242, 0.9), rgba(124, 58, 237, 0.9));
+    }
+    .contact-btn.email {
+      background: linear-gradient(135deg, rgba(234, 67, 53, 0.9), rgba(209, 72, 54, 0.9));
+    }
+
+    .contact-btn:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .contact-btn.call:hover {
+      background: linear-gradient(135deg, rgba(29, 168, 81, 0.95), rgba(14, 124, 111, 0.95));
+    }
+    .contact-btn.whatsapp:hover {
+      background: linear-gradient(135deg, rgba(59, 14, 201, 0.95), rgba(91, 33, 182, 0.95));
+    }
+    .contact-btn.email:hover {
+      background: linear-gradient(135deg, rgba(211, 52, 39, 0.95), rgba(176, 58, 46, 0.95));
+    }
+
+    .response-message {
+      margin-top: 60px;
+      color: #fff;
+      font-size: 0.95em;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 12px 20px;
+      border-radius: 10px;
+      display: block;
+      text-align: center;
+      width: 100%;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease 1s, transform 0.8s ease 1s;
+    }
+
+    #contact.animated .response-message {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: white;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    footer.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+               RESPONSIVE
+    ============================================================ */
+    @media (max-width: 992px) {
+      #services .services-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 10px 15px;
+      }
+
+      .logo-container {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 10px;
+      }
+
+      header h1 {
+        font-size: 1.5em;
+        white-space: nowrap;
+      }
+
+      header img {
+        height: 50px;
+        margin-right: 8px;
+      }
+
+      nav {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 0;
+      }
+
+      nav a {
+        margin: 5px 10px;
+        display: inline-block;
+        font-size: 0.9em;
+      }
+
+      #home h1 {
+        font-size: 2em;
+      }
+      #home p {
+        font-size: 1em;
+      }
+
+      section {
+        padding: 120px 5% 80px;
+      }
+
+      section h2 {
+        font-size: 1.8em;
+        margin-bottom: 30px;
+      }
+
+      .service-card {
+        padding: 30px 20px;
+        min-height: 250px;
+      }
+
+      #products {
+        padding: 120px 4% 80px;
+      }
+      #products h2 {
+        font-size: 2em;
+      }
+
+      .product-card {
+        padding: 16px 10px 10px 10px;
+      }
+
+      .product-table {
+        min-width: 820px;
+        font-size: 0.8em;
+      }
+
+      .product-table thead th {
+        padding: 12px 8px;
+        font-size: 0.75em;
+      }
+
+      .product-table tbody td {
+        padding: 10px 8px;
+      }
+
+      .product-table .logo-cell img {
+        width: 38px;
+        height: 38px;
+      }
+
+      .product-table .dl-btn {
+        padding: 4px 10px;
+        font-size: 0.65em;
+      }
+
+      .product-table .visit-link {
+        font-size: 0.7em;
+      }
+
+      .product-table .coming-soon-tag {
+        font-size: 0.6em;
+        padding: 3px 10px;
+      }
+
+      .product-table .desc-cell {
+        max-width: 120px;
+        font-size: 0.75em;
+      }
+
+      .contact-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .contact-btn {
+        width: 280px;
+        height: 180px;
+      }
+
+      .contact-btn i {
+        font-size: 50px;
+      }
+
+      .contact-subtitle {
+        font-size: 1em;
+        padding: 0 15px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      #services .services-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo-container {
+        justify-content: center;
+      }
+
+      header h1 {
+        font-size: 1.3em;
+      }
+
+      header img {
+        height: 45px;
+        margin-right: 6px;
+      }
+
+      nav a {
+        margin: 5px 8px;
+        font-size: 0.85em;
+      }
+
+      section {
+        padding: 100px 4% 60px;
+      }
+
+      section h2 {
+        font-size: 1.6em;
+      }
+
+      .contact-btn {
+        width: 250px;
+        height: 170px;
+      }
+
+      .contact-btn i {
+        font-size: 45px;
+      }
+
+      #products h2 {
+        font-size: 1.8em;
+      }
+
+      .product-card {
+        padding: 12px 6px 6px 6px;
+      }
+
+      .product-table {
+        min-width: 700px;
+        font-size: 0.7em;
+      }
+
+      .product-table thead th {
+        padding: 10px 6px;
+        font-size: 0.65em;
+      }
+
+      .product-table tbody td {
+        padding: 8px 6px;
+      }
+
+      .product-table .logo-cell img {
+        width: 32px;
+        height: 32px;
+      }
+
+      .product-table .dl-btn {
+        padding: 3px 8px;
+        font-size: 0.6em;
+        gap: 3px;
+      }
+
+      .product-table .visit-link {
+        font-size: 0.65em;
+      }
+
+      .product-table .coming-soon-tag {
+        font-size: 0.55em;
+        padding: 2px 8px;
+      }
+
+      .product-table .desc-cell {
+        max-width: 90px;
+        font-size: 0.7em;
+      }
+
+      .product-table .name-cell {
+        font-size: 0.8em;
+      }
+    }
+
+    @media (max-width: 320px) {
+      header h1 {
+        font-size: 1.2em;
+      }
+      header img {
+        height: 40px;
+      }
+      section {
+        padding: 90px 4% 50px;
+      }
+      .contact-btn {
+        width: 220px;
+        height: 160px;
+      }
+      .product-table {
+        min-width: 600px;
+        font-size: 0.6em;
+      }
+      .product-table thead th {
+        padding: 8px 4px;
+        font-size: 0.55em;
+      }
+      .product-table tbody td {
+        padding: 6px 4px;
+      }
+      .product-table .logo-cell img {
+        width: 28px;
+        height: 28px;
+      }
+      .product-table .desc-cell {
+        max-width: 70px;
+        font-size: 0.6em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    document.addEventListener("contextmenu", e => e.preventDefault());
+  </script>
+
+  <video autoplay muted loop playsinline class="video-bg">
+    <source src="background.mp4" type="video/mp4" />
+  </video>
+  <div class="overlay"></div>
+
+  <header>
+    <div class="logo-container">
+      <img src="logo.png" alt="ISS Logo" />
+      <h1>India Soft Solutions</h1>
+    </div>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#products">Products</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section id="home">
+    <h1>Welcome to <span>I</span>ndia <span>S</span>oft <span>S</span>olutions</h1>
+    <p>
+      We design and develop powerful digital experiences — from mobile apps to web platforms — to help businesses grow with technology.
+    </p>
+    <a href="#services" class="home-btn">Explore Our Work</a>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <h2>About Us</h2>
+    <div class="about-content">
+      <div class="glass-card about-box">
+        <h3>🏢 Who We Are</h3>
+        <p>India Soft Solutions (ISS) is a creative and technology-driven SaaS company focused on delivering modern, high-quality digital solutions for businesses and individuals. We specialize in web development, mobile apps, and customized software designed to enhance user experience and business growth. With innovation, precision, and customer satisfaction at our core, ISS transforms ideas into impactful digital realities.</p>
+      </div>
+      <div class="glass-card about-box">
+        <h3>🎯 Our Mission</h3>
+        <p>To provide reliable, scalable, and high-performance digital solutions that empower clients to reach new heights through technology and innovation. We strive to blend creativity with technical excellence, ensuring every project reflects quality, precision, and long-term value. Our mission is to help businesses evolve and stay ahead in an ever-changing digital world.</p>
+      </div>
+      <div class="glass-card about-box">
+        <h3>🌟 Our Vision</h3>
+        <p>To be a global leader in digital innovation — inspiring change through smart technology, sustainable growth, and creative transformation. We envision a connected world where every business, regardless of size, can harness the power of technology to thrive, innovate, and make a positive impact on society.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services">
+    <h2>Our Services</h2>
+    <div class="services-container">
+      <div class="service-card">
+        <div class="icon">
+          <img src="www.png" alt="Web Development Icon">
+        </div>
+        <h3>Web Development</h3>
+        <p>Custom websites with responsive design, modern frameworks, and SEO optimization.</p>
+      </div>
+      <div class="service-card">
+        <div class="icon">
+          <img src="appDev.png" alt="Mobile App Development Icon">
+        </div>
+        <h3>Mobile App Development</h3>
+        <p>Android and iOS mobile app solutions with native and cross-platform development.</p>
+      </div>
+      <div class="service-card">
+        <div class="icon">
+          <img src="ux-ui.jpg" alt="UI/UX Design Icon">
+        </div>
+        <h3>UI/UX Design</h3>
+        <p>Beautiful and user-friendly interface designs that enhance user experience.</p>
+      </div>
+      <div class="service-card">
+        <div class="icon">
+          <img src="Support___Maintenance.png" alt="Support & Maintenance Icon">
+        </div>
+        <h3>Support & Maintenance</h3>
+        <p>24/7 technical support and regular maintenance for all your digital products.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products -->
+  <section id="products">
+    <h2>Our Products</h2>
+    <div class="product-card-wrapper">
+      <div class="product-card">
+        <div class="product-table-wrap">
+          <table class="product-table">
+            <thead>
+              <tr>
+                <th>SL</th>
+                <th>Logo</th>
+                <th>Name</th>
+                <th>Sort Description</th>
+                <th>Download .exe</th>
+                <th>Download .apk</th>
+                <th>Download .dmg</th>
+                <th>Visit Website</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>01</td>
+                <td class="logo-cell"><img src="nestlogo.png" alt="Nest Communication" /></td>
+                <td class="name-cell">Nest Communication</td>
+                <td class="desc-cell">Video Communication App, It support Meeting Creation, Joining via ID and live camera/mic control, with clean and responsive UI.</td>
+                
+                <td><a href="https://github.com/jayantadutta-code/nestEXEfile/releases/download/v2.1.0/nest_communication.zip" class="dl-btn exe" download><i class="fab fa-windows"></i> .exe</a></td>
+               <td><a href="https://github.com/jayantadutta-code/nestAPKfile/releases/download/v2.1.0/app-release.apk" class="dl-btn apk" target="_blank"><i class="fab fa-android"></i> .apk</a></td>
+                <td><a href="https://github.com/jayantadutta-code/nestDMGfile/releases/download/v2.1.0/Nest.Communication.app.zip" class="dl-btn dmg" target="_blank"><i class="fa-brands fa-apple"></i> .dmg</a></td>
+                <td><a href="https://nestcommunication.vercel.app/" class="visit-link" target="_blank"><i class="fas fa-external-link-alt"></i> Visit</a></td>
+              </tr>
+              <tr>
+                <td>02</td>
+                <td class="logo-cell"><img src="LeaseVault.png" alt="LeaseVault" /></td>
+                <td class="name-cell">LeaseVault</td>
+                <td class="desc-cell">Rental Management App, it is a Flutter-based rental management application powered by a Supabase backend that streamlines the renting process for landlords (lessors) and tenants (lessees).</td>
+                <td><a href="https://github.com/jayantadutta-code/LeaseVaultEXE/releases/download/v1.0.0/lease_vault.zip" class="dl-btn exe"><i class="fab fa-windows"></i> .exe</a></td>
+                <td><a href="https://github.com/jayantadutta-code/LeaseVaultAPK/releases/download/v1.0.0/app-release.apk" class="dl-btn apk" target="_blank"><i class="fab fa-android"></i> .apk</a></td>
+                <td><a href="https://github.com/jayantadutta-code/LeaseVaultDMG/releases/download/v1.0.0/LeaseVault.app.zip" class="dl-btn dmg" target="_blank"><i class="fa-brands fa-apple"></i> .dmg</a></td>
+                <td><a href="https://leasevaultweb.netlify.app" class="visit-link" target="_blank"><i class="fas fa-external-link-alt"></i> Visit</a></td>
+              </tr>
+              <tr>
+                <td>03</td>
+                <td class="logo-cell"><img src="images/logo.png" alt="SecureVault" /></td>
+                <td class="name-cell">SecureVault</td>
+                <td class="desc-cell">Encrypted password manager</td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+              </tr>
+              <tr>
+                <td>04</td>
+                <td class="logo-cell"><img src="images/logo.png" alt="DataFlow" /></td>
+                <td class="name-cell">DataFlow</td>
+                <td class="desc-cell">Real-time data sync &amp; analytics</td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+              </tr>
+              <tr>
+                <td>05</td>
+                <td class="logo-cell"><img src="images/logo.png" alt="CloudNest" /></td>
+                <td class="name-cell">CloudNest</td>
+                <td class="desc-cell">Cloud storage &amp; file sharing</td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+              </tr>
+              <tr>
+                <td>06</td>
+                <td class="logo-cell"><img src="images/logo.png" alt="SwiftCart" /></td>
+                <td class="name-cell">SwiftCart</td>
+                <td class="desc-cell">E-commerce platform for SMEs</td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+              </tr>
+              <tr>
+                <td>07</td>
+                <td class="logo-cell"><img src="images/logo.png" alt="HealthTrack" /></td>
+                <td class="name-cell">HealthTrack</td>
+                <td class="desc-cell">Patient health monitoring system</td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+              </tr>
+              <tr>
+                <td>08</td>
+                <td class="logo-cell"><img src="images/logo.png" alt="EduSmart" /></td>
+                <td class="name-cell">EduSmart</td>
+                <td class="desc-cell">AI-powered learning management</td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+              </tr>
+              <tr>
+                <td>09</td>
+                <td class="logo-cell"><img src="images/logo.png" alt="FinSecure" /></td>
+                <td class="name-cell">FinSecure</td>
+                <td class="desc-cell">Blockchain-based financial security</td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+              </tr>
+              <tr>
+                <td>10</td>
+                <td class="logo-cell"><img src="images/logo.png" alt="FinSecure" /></td>
+                <td class="name-cell">FinSecure</td>
+                <td class="desc-cell">Blockchain-based financial security</td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+                <td><span class="coming-soon-tag">Coming Soon</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <p class="contact-subtitle">Get in touch with us through any of these convenient methods</p>
+    <div class="contact-buttons">
+      <a href="tel:+918250227952" class="contact-btn call">
+        <i class="fas fa-phone-alt"></i>
+        <span>CALL US</span>
+        
+      </a>
+      <a href="https://wa.me/918250227952?text=Hello%20India%20Soft%20Solutions,%20I%20would%20like%20to%20discuss%20a%20project" class="contact-btn whatsapp" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+        <span>WHATSAPP</span>
+       
+      </a>
+      <a href="mailto:indiasoftsolutions2025@gmail.com?subject=Enquiry%20from%20Website&body=Hello%20India%20Soft%20Solutions,%0A%0AI%20would%20like%20to%20get%20more%20information%20about%20your%20services." class="contact-btn email">
+        <i class="fas fa-envelope"></i>
+        <span>EMAIL US</span>
+        
+      </a>
+    </div>
+    <p class="response-message">We typically respond 24/7 during business days.</p>
+  </section>
+
+  <footer>© 2026 India Soft Solutions | All Rights Reserved</footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById('home').classList.add('animated');
+
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      const observerOptions = { threshold: 0.2, rootMargin: '0px 0px -50px 0px' };
+
+      const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animated');
+          } else {
+            entry.target.classList.remove('animated');
+          }
+        });
+      }, observerOptions);
+
+      const sections = document.querySelectorAll('section:not(#home)');
+      sections.forEach(section => {
+        sectionObserver.observe(section);
+      });
+
+      const footer = document.querySelector('footer');
+      const footerObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animated');
+          }
+        });
+      }, { threshold: 0.5 });
+      if (footer) footerObserver.observe(footer);
+
+      function isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      }
+
+      const callBtn = document.querySelector('.contact-btn.call');
+      if (callBtn) {
+        callBtn.addEventListener('click', function(e) {
+          if (!isMobileDevice()) {
+            if (!confirm("You're on a desktop device. Would you like to copy the phone number instead?")) {
+              e.preventDefault();
+              navigator.clipboard.writeText("+918250227952").then(() => {
+                alert("Phone number copied to clipboard: +91 8250227952");
+              });
+            }
+          }
+        });
+      }
+
+      let lastScrollTop = 0;
+      const header = document.querySelector('header');
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTop > 100) {
+          header.style.background = 'rgba(0, 0, 0, 0.7)';
+          header.style.backdropFilter = 'blur(15px)';
+        } else {
+          header.style.background = 'rgba(0, 0, 0, 0.4)';
+          header.style.backdropFilter = 'blur(12px)';
+        }
+        if (scrollTop > lastScrollTop && scrollTop > 100) {
+          header.style.transform = 'translateY(-100%)';
+        } else {
+          header.style.transform = 'translateY(0)';
+        }
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+      });
+    });
+  </script>
+</body>
+</html>

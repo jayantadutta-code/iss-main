@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, "", "/");
+    }
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>India Soft Solutions (ISS)</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="logo.ico" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Google Fonts: Space Grotesk for a high-tech feel -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-dark: #020617;
+      /* Very dark slate */
+      --accent: #2dd4bf;
+      /* Neon Teal */
+      --accent-dark: #0f766e;
+      --card-bg: rgba(15, 23, 42, 0.65);
+      --card-border: rgba(45, 212, 191, 0.15);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Space Grotesk', sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body::-webkit-scrollbar {
+      display: none;
+    }
+
+    body {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    html {
+      overflow-x: hidden;
+    }
+
+    img {
+      -webkit-user-drag: none;
+      pointer-events: none;
+    }
+
+    /* Canvas Background */
+    #honeycomb-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+    }
+
+    /* Floating Navbar */
+    header {
+      position: fixed;
+      top: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 1100px;
+      background: rgba(2, 6, 23, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 12px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      transition: all 0.4s ease;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 1.4em;
+      color: var(--text-main);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    header img {
+      height: 45px;
+      margin-right: 12px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 500;
+      transition: all 0.3s;
+      font-size: 0.95em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+      text-shadow: 0 0 10px rgba(45, 212, 191, 0.5);
+    }
+
+    /* Hero Section */
+    #home {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+      position: relative;
+    }
+
+    .hero-content {
+      background: radial-gradient(circle, rgba(2, 6, 23, 0.8) 0%, transparent 70%);
+      padding: 60px;
+      border-radius: 50%;
+      animation: pulseGlow 4s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% {
+        box-shadow: 0 0 40px rgba(45, 212, 191, 0.0);
+      }
+
+      100% {
+        box-shadow: 0 0 80px rgba(45, 212, 191, 0.1);
+      }
+    }
+
+    #home h1 {
+      font-size: 4em;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    }
+
+    #home h1 span {
+      color: var(--accent);
+      text-shadow: 0 0 20px rgba(45, 212, 191, 0.4);
+    }
+
+    #home p {
+      font-size: 1.2em;
+      max-width: 600px;
+      margin: 0 auto 40px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .home-btn {
+      background: transparent;
+      color: var(--accent);
+      padding: 16px 40px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 1.1em;
+      text-decoration: none;
+      border: 1px solid var(--accent);
+      box-shadow: 0 0 15px rgba(45, 212, 191, 0.2), inset 0 0 10px rgba(45, 212, 191, 0.1);
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .home-btn:hover {
+      background: var(--accent);
+      color: var(--bg-dark);
+      box-shadow: 0 0 30px rgba(45, 212, 191, 0.6);
+    }
+
+    /* Section Global Styles */
+    section:not(#home) {
+      padding: 120px 8%;
+      position: relative;
+    }
+
+    .section-title {
+      font-size: 2.5em;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 50px;
+      display: inline-block;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 10px;
+    }
+
+    /* Bento Box Grid System */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      grid-auto-rows: minmax(180px, auto);
+    }
+
+    .bento-item {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px 30px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bento-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at top left, rgba(45, 212, 191, 0.1), transparent 50%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .bento-item:hover {
+      transform: translateY(-5px);
+      border-color: rgba(45, 212, 191, 0.5);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(45, 212, 191, 0.1);
+    }
+
+    .bento-item:hover::before {
+      opacity: 1;
+    }
+
+    /* About Bento Spans */
+    #about .bento-item:nth-child(1) {
+      grid-column: span 4;
+    }
+
+    #about .bento-item:nth-child(2) {
+      grid-column: span 2;
+    }
+
+    #about .bento-item:nth-child(3) {
+      grid-column: span 2;
+    }
+
+    /* Services Bento Spans */
+    #services .bento-item {
+      grid-column: span 2;
+      text-align: center;
+    }
+
+    .bento-item h3 {
+      color: var(--accent);
+      font-size: 1.4em;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .bento-item p {
+      color: var(--text-muted);
+      line-height: 1.7;
+      font-size: 1.05em;
+      position: relative;
+      z-index: 2;
+    }
+
+    .bento-item .icon-wrapper {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 20px;
+      background: rgba(45, 212, 191, 0.1);
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid rgba(45, 212, 191, 0.3);
+    }
+
+    .bento-item .icon-wrapper img {
+      width: 30px;
+      filter: brightness(0) invert(1);
+    }
+
+    /* Products Glass Terminal */
+    .terminal-container {
+      background: rgba(2, 6, 23, 0.8);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+    }
+
+    .terminal-header {
+      background: rgba(15, 23, 42, 0.9);
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .dot.red {
+      background: #ef4444;
+    }
+
+    .dot.yellow {
+      background: #eab308;
+    }
+
+    .dot.green {
+      background: #22c55e;
+    }
+
+    .product-table-wrap {
+      overflow-x: auto;
+      padding: 20px;
+    }
+
+    .product-table {
+      width: 100%;
+      min-width: 1000px;
+      border-collapse: collapse;
+      font-size: 0.95em;
+    }
+
+    .product-table th {
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.8em;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .product-table td {
+      padding: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      vertical-align: middle;
+    }
+
+    .product-table tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .product-table .logo-cell img {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+
+    .product-table .name-cell {
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .product-table .desc-cell {
+      color: var(--text-muted);
+      font-size: 0.9em;
+    }
+
+    .dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.8em;
+      font-weight: 600;
+      text-decoration: none;
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.2s ease;
+    }
+
+    .dl-btn:hover {
+      background: var(--accent);
+      color: var(--bg-dark);
+      border-color: var(--accent);
+    }
+
+    .visit-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .visit-link:hover {
+      text-shadow: 0 0 10px rgba(45, 212, 191, 0.5);
+    }
+
+    .coming-soon-tag {
+      font-size: 0.75em;
+      color: var(--text-muted);
+      border: 1px dashed var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    /* Contact Section */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .contact-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 50px 20px;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.4s ease;
+      color: var(--text-main);
+    }
+
+    .contact-card i {
+      font-size: 3em;
+      margin-bottom: 20px;
+      color: var(--accent);
+      transition: transform 0.4s ease;
+    }
+
+    .contact-card span {
+      display: block;
+      font-size: 1.2em;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .contact-card:hover {
+      background: rgba(45, 212, 191, 0.1);
+      border-color: var(--accent);
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(45, 212, 191, 0.2);
+    }
+
+    .contact-card:hover i {
+      transform: scale(1.2);
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--card-border);
+      background: rgba(2, 6, 23, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    /* Fade-in Animation Classes */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .bento-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      #about .bento-item:nth-child(1) {
+        grid-column: span 2;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        border-radius: 16px;
+        padding: 15px;
+      }
+
+      nav {
+        margin-top: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      #home h1 {
+        font-size: 2.5em;
+      }
+
+      .bento-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #about .bento-item:nth-child(1),
+      #about .bento-item:nth-child(2),
+      #about .bento-item:nth-child(3),
+      #services .bento-item {
+        grid-column: span 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Interactive Honeycomb Canvas -->
+  <canvas id="honeycomb-canvas"></canvas>
+
+  <header>
+    <div class="logo-container">
+      <img src="logo.png" alt="ISS Logo" />
+      <h1>India Soft Solutions</h1>
+    </div>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#products">Products</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section id="home">
+    <div class="hero-content">
+      <h1>Welcome to <span>I</span>ndia <span>S</span>oft <span>S</span>olutions</h1>
+      <p>We design and develop powerful digital experiences — from mobile apps to web platforms — to help businesses
+        grow with technology.</p>
+      <a href="#services" class="home-btn">Explore Our Work</a>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <h2 class="section-title reveal">About Us</h2>
+    <div class="bento-grid">
+      <div class="bento-item reveal">
+        <h3>🏢 Who We Are</h3>
+        <p>India Soft Solutions (ISS) is a creative and technology-driven SaaS company focused on delivering modern,
+          high-quality digital solutions for businesses and individuals. We specialize in web development, mobile apps,
+          and customized software designed to enhance user experience and business growth. With innovation, precision,
+          and customer satisfaction at our core, ISS transforms ideas into impactful digital realities.</p>
+      </div>
+      <div class="bento-item reveal">
+        <h3>🎯 Our Mission</h3>
+        <p>To provide reliable, scalable, and high-performance digital solutions that empower clients to reach new
+          heights through technology and innovation. We strive to blend creativity with technical excellence, ensuring
+          every project reflects quality, precision, and long-term value.</p>
+      </div>
+      <div class="bento-item reveal">
+        <h3>🌟 Our Vision</h3>
+        <p>To be a global leader in digital innovation — inspiring change through smart technology, sustainable growth,
+          and creative transformation. We envision a connected world where every business can harness the power of
+          technology to thrive.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services">
+    <h2 class="section-title reveal">Our Services</h2>
+    <div class="bento-grid">
+      <div class="bento-item reveal">
+        <div class="icon-wrapper"><img src="www.png" alt="Web"></div>
+        <h3>Web Development</h3>
+        <p>Custom websites with responsive design, modern frameworks, and SEO optimization.</p>
+      </div>
+      <div class="bento-item reveal">
+        <div class="icon-wrapper"><img src="appDev.png" alt="App"></div>
+        <h3>Mobile App Development</h3>
+        <p>Android and iOS mobile app solutions with native and cross-platform development.</p>
+      </div>
+      <div class="bento-item reveal">
+        <div class="icon-wrapper"><img src="ux-ui.jpg" alt="UI/UX"></div>
+        <h3>UI/UX Design</h3>
+        <p>Beautiful and user-friendly interface designs that enhance user experience.</p>
+      </div>
+      <div class="bento-item reveal">
+        <div class="icon-wrapper"><img src="Support___Maintenance.png" alt="Support"></div>
+        <h3>Support & Maintenance</h3>
+        <p>24/7 technical support and regular maintenance for all your digital products.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products -->
+  <section id="products">
+    <h2 class="section-title reveal">Our Products</h2>
+    <div class="terminal-container reveal">
+      <div class="terminal-header">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+      </div>
+      <div class="product-table-wrap">
+        <table class="product-table">
+          <thead>
+            <tr>
+              <th>SL</th>
+              <th>Logo</th>
+              <th>Name</th>
+              <th>Sort Description</th>
+              <th>Download .exe</th>
+              <th>Download .apk</th>
+              <th>Download .dmg</th>
+              <th>Visit Website</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>01</td>
+              <td class="logo-cell"><img src="nestlogo.png" alt="Nest" /></td>
+              <td class="name-cell">Nest Communication</td>
+              <td class="desc-cell">Video Communication App, It support Meeting Creation, Joining via ID and live
+                camera/mic control.</td>
+              <td><a
+                  href="https://github.com/jayantadutta-code/nestEXEfile/releases/download/v2.1.0/nest_communication.zip"
+                  class="dl-btn"><i class="fab fa-windows"></i> .exe</a></td>
+              <td><a href="https://github.com/jayantadutta-code/nestAPKfile/releases/download/v2.1.0/app-release.apk"
+                  class="dl-btn" target="_blank"><i class="fab fa-android"></i> .apk</a></td>
+              <td><a
+                  href="https://github.com/jayantadutta-code/nestDMGfile/releases/download/v2.1.0/Nest.Communication.app.zip"
+                  class="dl-btn" target="_blank"><i class="fa-brands fa-apple"></i> .dmg</a></td>
+              <td><a href="https://nestcommunication.vercel.app/" class="visit-link" target="_blank"><i
+                    class="fas fa-external-link-alt"></i> Visit</a></td>
+            </tr>
+            <!-- Placeholders for rest -->
+            <tr>
+              <td>02</td>
+              <td class="logo-cell"><img src="LeaseVault.png" alt="LeaseVault" /></td>
+              <td class="name-cell">LeaseVault</td>
+              <td class="desc-cell">Rental Management App, it is a Flutter-based rental management application powered
+                by a Supabase backend that streamlines the renting process for landlords (lessors) and tenants
+                (lessees).</td>
+              <td><a href="https://github.com/jayantadutta-code/LeaseVaultEXE/releases/download/v1.0.0/LeaseVault.zip"
+                  class="dl-btn"><i class="fab fa-windows"></i> .exe</a></td>
+                  
+              <td><a href="https://github.com/jayantadutta-code/LeaseVaultAPK/releases/download/v1.0.0/app-release.apk"
+                  class="dl-btn" target="_blank"><i class="fab fa-android"></i> .apk</a></td>
+              <td><a
+                  href="https://github.com/jayantadutta-code/LeaseVaultDMG/releases/download/v1.0.0/LeaseVault.app.zip"
+                  class="dl-btn" target="_blank"><i class="fa-brands fa-apple"></i> .dmg</a></td>
+              <td><a href="https://leasevaultweb.netlify.app" class="visit-link" target="_blank"><i
+                    class="fas fa-external-link-alt"></i> Visit</a></td>
+            </tr>
+            <tr>
+              <td>03</td>
+              <td class="logo-cell"><img src="logo.png" alt="SecureVault" /></td>
+              <td class="name-cell">SecureVault</td>
+              <td class="desc-cell">Encrypted password manager</td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+            </tr>
+            <tr>
+              <td>04</td>
+              <td class="logo-cell"><img src="logo.png" alt="DataFlow" /></td>
+              <td class="name-cell">DataFlow</td>
+              <td class="desc-cell">Real-time data sync &amp; analytics</td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+            </tr>
+            <tr>
+              <td>05</td>
+              <td class="logo-cell"><img src="logo.png" alt="CloudNest" /></td>
+              <td class="name-cell">CloudNest</td>
+              <td class="desc-cell">Cloud storage &amp; file sharing</td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+            </tr>
+            <tr>
+              <td>06</td>
+              <td class="logo-cell"><img src="logo.png" alt="SwiftCart" /></td>
+              <td class="name-cell">SwiftCart</td>
+              <td class="desc-cell">E-commerce platform for SMEs</td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+            </tr>
+            <tr>
+              <td>07</td>
+              <td class="logo-cell"><img src="logo.png" alt="HealthTrack" /></td>
+              <td class="name-cell">HealthTrack</td>
+              <td class="desc-cell">Patient health monitoring system</td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+            </tr>
+            <tr>
+              <td>08</td>
+              <td class="logo-cell"><img src="logo.png" alt="EduSmart" /></td>
+              <td class="name-cell">EduSmart</td>
+              <td class="desc-cell">AI-powered learning management</td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+            </tr>
+            <tr>
+              <td>09</td>
+              <td class="logo-cell"><img src="logo.png" alt="FinSecure" /></td>
+              <td class="name-cell">FinSecure</td>
+              <td class="desc-cell">Blockchain-based financial security</td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td class="logo-cell"><img src="logo.png" alt="FinSecure" /></td>
+              <td class="name-cell">FinSecure</td>
+              <td class="desc-cell">Blockchain-based financial security</td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+              <td><span class="coming-soon-tag">Coming Soon</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <h2 class="section-title reveal">Contact Us</h2>
+    <div class="contact-grid">
+      <a href="tel:+918250227952" class="contact-card reveal">
+        <i class="fas fa-phone-alt"></i>
+        <span>CALL US</span>
+      </a>
+      <a href="https://wa.me/918250227952" class="contact-card reveal" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+        <span>WHATSAPP</span>
+      </a>
+      <a href="mailto:indiasoftsolutions2025@gmail.com" class="contact-card reveal">
+        <i class="fas fa-envelope"></i>
+        <span>EMAIL US</span>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 India Soft Solutions | All Rights Reserved</p>
+  </footer>
+
+  <script>
+    /* --- Intersection Observer for Fade In --- */
+    function reveal() {
+      var reveals = document.querySelectorAll(".reveal");
+      for (var i = 0; i < reveals.length; i++) {
+        var windowHeight = window.innerHeight;
+        var elementTop = reveals[i].getBoundingClientRect().top;
+        var elementVisible = 100;
+        if (elementTop < windowHeight - elementVisible) {
+          reveals[i].classList.add("active");
+        }
+      }
+    }
+    window.addEventListener("scroll", reveal);
+    reveal();
+
+    /* --- Interactive Honeycomb Canvas --- */
+    const canvas = document.getElementById('honeycomb-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    // Hexagon parameters
+    const hexRadius = 40;
+    const hexHeight = hexRadius * Math.sqrt(3);
+    const hexWidth = hexRadius * 2;
+    const xOffset = hexWidth * 0.75;
+    const yOffset = hexHeight;
+
+    let mouse = { x: null, y: null };
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+    window.addEventListener('mouseout', () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    function drawHexagon(x, y, radius, alpha) {
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const angle = Math.PI / 3 * i;
+        const hx = x + radius * Math.cos(angle);
+        const hy = y + radius * Math.sin(angle);
+        if (i === 0) ctx.moveTo(hx, hy);
+        else ctx.lineTo(hx, hy);
+      }
+      ctx.closePath();
+      ctx.lineWidth = 1 + alpha * 3;
+      ctx.strokeStyle = `rgba(45, 212, 191, ${0.05 + alpha})`;
+      if (alpha > 0.1) {
+        ctx.fillStyle = `rgba(45, 212, 191, ${alpha * 0.15})`;
+        ctx.fill();
+      }
+      ctx.stroke();
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw grid
+      for (let row = 0; row < height / yOffset + 2; row++) {
+        for (let col = 0; col < width / xOffset + 2; col++) {
+          let x = col * xOffset;
+          let y = row * yOffset;
+          if (col % 2 === 1) y += yOffset / 2;
+
+          let alpha = 0;
+          if (mouse.x !== null) {
+            const dx = mouse.x - x;
+            const dy = mouse.y - y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const maxDist = 250;
+            if (distance < maxDist) {
+              // Closer = higher alpha
+              alpha = 1 - (distance / maxDist);
+            }
+          }
+
+          drawHexagon(x, y, hexRadius, alpha);
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+
+</html>

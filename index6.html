@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, "", "/");
+    }
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>India Soft Solutions | Interactive Masterpiece</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="logo.ico" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Google Fonts: Space Grotesk & Clash Display (using Outfit as fallback for Clash) -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Space+Grotesk:wght@300;500;700&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-dark: #050505;
+      --accent: #d946ef;
+      /* Fuchsia / Magenta */
+      --accent-alt: #0ea5e9;
+      /* Cyan / Blue */
+      --glass: rgba(15, 15, 20, 0.4);
+      --glass-border: rgba(255, 255, 255, 0.05);
+      --text-main: #ffffff;
+      --text-muted: #a1a1aa;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body.custom-cursor-enabled,
+    body.custom-cursor-enabled * {
+      cursor: none;
+      /* Hide default cursor */
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--text-main);
+      background-color: var(--bg-dark);
+      overflow: hidden;
+      /* We will use a custom scroll container */
+    }
+
+    /* --- Custom Cursor --- */
+    #cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 20px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      mix-blend-mode: screen;
+      box-shadow: 0 0 20px var(--accent);
+      transition: width 0.3s, height 0.3s, background-color 0.3s;
+    }
+
+    #cursor-follower {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 50px;
+      height: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 9998;
+      transition: width 0.3s, height 0.3s;
+    }
+
+    .hovering #cursor {
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      box-shadow: none;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .hovering #cursor-follower {
+      width: 0;
+      height: 0;
+      border: none;
+    }
+
+    /* --- Scroll Snap Container --- */
+    .scroll-container {
+      width: 100vw;
+      height: 100vh;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+
+    .scroll-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scroll-container {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* --- Common Section Styles --- */
+    .section {
+      width: 100vw;
+      height: 100vh;
+      scroll-snap-align: start;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* --- Navbar --- */
+    header {
+      position: fixed;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 1400px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      mix-blend-mode: difference;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    header h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5em;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    header img {
+      height: 40px;
+    }
+
+    nav {
+      display: flex;
+      gap: 40px;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      letter-spacing: 1px;
+      font-size: 0.9em;
+      text-transform: uppercase;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: var(--text-main);
+      transition: width 0.3s;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    /* --- Hero Section (Interactive Canvas) --- */
+    #hero-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .hero-content {
+      text-align: center;
+      z-index: 10;
+      pointer-events: none;
+      /* Let canvas receive mouse events */
+    }
+
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 8vw;
+      font-weight: 900;
+      line-height: 1.1;
+      text-transform: uppercase;
+      letter-spacing: -2px;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #0ea5e9, #d946ef, #ffffff);
+      background-size: 200% auto;
+      color: transparent;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
+      filter: drop-shadow(0 0 30px rgba(14, 165, 233, 0.6));
+      animation: gradientPan 4s infinite linear;
+    }
+
+    @keyframes gradientPan {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .hero-subtitle {
+      font-size: 1.4vw;
+      color: #e4e4e7;
+      max-width: 600px;
+      margin: 0 auto 50px;
+      letter-spacing: 2px;
+      font-weight: 300;
+    }
+
+    .magnetic-btn-wrap {
+      display: inline-block;
+      pointer-events: auto;
+      /* Re-enable pointer events for button */
+    }
+
+    .magnetic-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: #fff;
+      text-decoration: none;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 1.1em;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: background 0.3s, transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .magnetic-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: var(--accent);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.5s ease, height 0.5s ease;
+      z-index: -1;
+    }
+
+    .magnetic-btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .magnetic-btn:hover {
+      border-color: transparent;
+    }
+
+    /* --- About & Services Section --- */
+    .bg-fluid {
+      background-image: url('wow_fluid.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      /* Parallax fallback */
+    }
+
+    .glass-panel {
+      width: 90%;
+      max-width: 1400px;
+      height: 75vh;
+      background: var(--glass);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      border: 1px solid var(--glass-border);
+      border-radius: 40px;
+      padding: 60px;
+      display: flex;
+      gap: 60px;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .panel-right {
+      flex: 1.5;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .sec-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 4em;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .sec-desc {
+      font-size: 1.1em;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 40px;
+    }
+
+    .service-box {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 30px;
+      transition: all 0.4s ease;
+    }
+
+    .service-box:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-10px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .service-box i {
+      font-size: 2.5em;
+      color: var(--accent-alt);
+      margin-bottom: 20px;
+    }
+
+    .service-box h3 {
+      font-size: 1.3em;
+      margin-bottom: 10px;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .service-box p {
+      color: var(--text-muted);
+      font-size: 0.9em;
+      line-height: 1.6;
+    }
+
+    /* --- Products & Contact Section --- */
+    .bg-core {
+      background-image: url('wow_core.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .terminal-glass {
+      width: 90%;
+      max-width: 1400px;
+      height: 80vh;
+      background: rgba(5, 5, 10, 0.7);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9);
+    }
+
+    .terminal-header {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 20px 30px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .terminal-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5em;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #3f3f46;
+    }
+
+    .terminal-body {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .terminal-body::-webkit-scrollbar {
+      display: none;
+    }
+
+    .prod-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .prod-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: scale(1.02);
+      border-color: var(--accent);
+    }
+
+    .prod-head {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .prod-head img {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      object-fit: contain;
+      background: #fff;
+      padding: 5px;
+    }
+
+    .prod-info h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2em;
+    }
+
+    .prod-info p {
+      font-size: 0.85em;
+      color: var(--text-muted);
+    }
+
+    .prod-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: auto;
+      flex-wrap: wrap;
+    }
+
+    .dl-btn {
+      padding: 8px 12px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.8em;
+      transition: 0.3s;
+    }
+
+    .dl-btn:hover {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .dl-btn.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .contact-footer {
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.5);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .contact-links {
+      display: flex;
+      gap: 30px;
+    }
+
+    .contact-links a {
+      color: #fff;
+      font-size: 1.5em;
+      transition: 0.3s;
+    }
+
+    .contact-links a:hover {
+      color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .copyright {
+      color: var(--text-muted);
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Custom Cursor -->
+  <div id="cursor"></div>
+  <div id="cursor-follower"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="logo-container">
+      <img src="logo.png" alt="ISS Logo" />
+      <h1>I.S.S</h1>
+    </div>
+    <nav>
+      <a href="#hero" class="hover-target">Home</a>
+      <a href="#about" class="hover-target">About</a>
+      <a href="#products" class="hover-target">Products</a>
+    </nav>
+  </header>
+
+  <div class="scroll-container">
+
+    <!-- 1. Hero Section -->
+    <section class="section" id="hero">
+      <canvas id="hero-canvas"></canvas>
+      <div class="hero-content">
+        <h1 class="hero-title">India Soft Solutions</h1>
+        <p class="hero-subtitle">Engineering powerful digital realities. From mobile apps to web platforms.</p>
+        <div class="magnetic-btn-wrap">
+          <a href="#about" class="magnetic-btn hover-target">Discover</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. About & Services Section -->
+    <section class="section bg-fluid" id="about">
+      <div class="glass-panel">
+        <div class="panel-left">
+          <h2 class="sec-title">Architects of<br>The Future</h2>
+          <p class="sec-desc">We are a creative and technology-driven SaaS company focused on delivering premium,
+            high-quality digital solutions. With innovation and precision at our core, we transform ideas into impactful
+            digital realities.</p>
+        </div>
+        <div class="panel-right">
+          <div class="service-box hover-target">
+            <i class="fas fa-globe"></i>
+            <h3>Web Platform</h3>
+            <p>Custom websites with responsive design and modern frameworks.</p>
+          </div>
+          <div class="service-box hover-target">
+            <i class="fas fa-mobile-alt"></i>
+            <h3>Mobile Apps</h3>
+            <p>Android and iOS solutions with native & cross-platform development.</p>
+          </div>
+          <div class="service-box hover-target">
+            <i class="fas fa-pen-nib"></i>
+            <h3>UI/UX Design</h3>
+            <p>Breathtaking interface designs that elevate user experiences.</p>
+          </div>
+          <div class="service-box hover-target">
+            <i class="fas fa-headset"></i>
+            <h3>Maintenance</h3>
+            <p>24/7 technical support to keep your digital products flawless.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Products Section -->
+    <section class="section bg-core" id="products">
+      <div class="terminal-glass">
+        <div class="terminal-header">
+          <div class="terminal-title">Our Ecosystem</div>
+          <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+        </div>
+
+        <div class="terminal-body">
+          <!-- Product 1 -->
+          <div class="prod-card hover-target">
+            <div class="prod-head">
+              <img src="nestlogo.png" alt="Nest">
+              <div class="prod-info">
+                <h4>Nest Communication</h4>
+                <p>Video Communication App</p>
+              </div>
+            </div>
+            <div class="prod-actions">
+              <a href="https://github.com/jayantadutta-code/nestEXEfile/releases/download/v2.1.0/nest_communication.zip"
+                class="dl-btn">EXE</a>
+              <a href="https://github.com/jayantadutta-code/nestAPKfile/releases/download/v2.1.0/app-release.apk"
+                class="dl-btn" target="_blank">APK</a>
+              <a href="https://github.com/jayantadutta-code/nestDMGfile/releases/download/v2.1.0/Nest.Communication.app.zip"
+                class="dl-btn" target="_blank">DMG</a>
+              <a href="https://nestcommunication.vercel.app/" class="dl-btn" target="_blank">Visit</a>
+            </div>
+          </div>
+
+          <!-- Product 2 -->
+          <div class="prod-card hover-target">
+            <div class="prod-head">
+              <img src="LeaseVault.png" alt="LeaseVault">
+              <div class="prod-info">
+                <h4>LeaseVault</h4>
+                <p>Rental Management App</p>
+              </div>
+            </div>
+            <div class="prod-actions">
+              <a href="https://github.com/jayantadutta-code/LeaseVaultEXE/releases/download/v1.0.0/lease_vault.zip"
+                class="dl-btn">EXE</a>
+              <a href="https://github.com/jayantadutta-code/LeaseVaultAPK/releases/download/v1.0.0/app-release.apk"
+                class="dl-btn" target="_blank">APK</a>
+              <a href="https://github.com/jayantadutta-code/LeaseVaultDMG/releases/download/v1.0.0/LeaseVault.app.zip"
+                class="dl-btn" target="_blank">DMG</a>
+              <a href="https://leasevaultweb.netlify.app" class="dl-btn" target="_blank">Visit</a>
+            </div>
+          </div>
+
+          <!-- Product 3 -->
+          <div class="prod-card hover-target">
+            <div class="prod-head">
+              <img src="logo.png" alt="SecureVault">
+              <div class="prod-info">
+                <h4>SecureVault</h4>
+                <p>Encrypted password manager</p>
+              </div>
+            </div>
+            <div class="prod-actions"><span class="dl-btn disabled">Coming Soon</span></div>
+          </div>
+
+          <!-- Product 4 -->
+          <div class="prod-card hover-target">
+            <div class="prod-head">
+              <img src="logo.png" alt="DataFlow">
+              <div class="prod-info">
+                <h4>DataFlow</h4>
+                <p>Real-time analytics</p>
+              </div>
+            </div>
+            <div class="prod-actions"><span class="dl-btn disabled">Coming Soon</span></div>
+          </div>
+
+          <!-- Product 5 -->
+          <div class="prod-card hover-target">
+            <div class="prod-head">
+              <img src="logo.png" alt="CloudNest">
+              <div class="prod-info">
+                <h4>CloudNest</h4>
+                <p>Cloud storage platform</p>
+              </div>
+            </div>
+            <div class="prod-actions"><span class="dl-btn disabled">Coming Soon</span></div>
+          </div>
+
+          <!-- Product 6 -->
+          <div class="prod-card hover-target">
+            <div class="prod-head">
+              <img src="logo.png" alt="HealthTrack">
+              <div class="prod-info">
+                <h4>HealthTrack</h4>
+                <p>Patient monitoring</p>
+              </div>
+            </div>
+            <div class="prod-actions"><span class="dl-btn disabled">Coming Soon</span></div>
+          </div>
+        </div>
+
+        <div class="contact-footer">
+          <div class="contact-links">
+            <a href="tel:+918250227952" class="hover-target"><i class="fas fa-phone-alt"></i></a>
+            <a href="https://wa.me/918250227952" class="hover-target" target="_blank"><i
+                class="fab fa-whatsapp"></i></a>
+            <a href="mailto:indiasoftsolutions2025@gmail.com" class="hover-target"><i class="fas fa-envelope"></i></a>
+          </div>
+          <div class="copyright">© 2026 India Soft Solutions</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // --- Custom Cursor Logic ---
+    const cursor = document.getElementById('cursor');
+    const cursorFollower = document.getElementById('cursor-follower');
+    const isMobile = navigator.maxTouchPoints > 0;
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let followerX = window.innerWidth / 2;
+    let followerY = window.innerHeight / 2;
+    
+    if (isMobile) {
+      cursor.style.display = 'none';
+      cursorFollower.style.display = 'none';
+      document.body.style.cursor = 'default';
+      // Position offscreen initially so it doesn't repel particles at start
+      followerX = -1000;
+      followerY = -1000;
+
+      // Allow touch events to interact with particles
+      window.addEventListener('touchmove', (e) => {
+        if (e.touches.length > 0) {
+          followerX = e.touches[0].clientX;
+          followerY = e.touches[0].clientY;
+        }
+      });
+      window.addEventListener('touchend', () => {
+        followerX = -1000;
+        followerY = -1000;
+      });
+    } else {
+      document.body.classList.add('custom-cursor-enabled');
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursor.style.left = mouseX + 'px';
+        cursor.style.top = mouseY + 'px';
+      });
+
+      // Smooth follower interpolation
+      function renderCursor() {
+        followerX += (mouseX - followerX) * 0.15;
+        followerY += (mouseY - followerY) * 0.15;
+        cursorFollower.style.left = followerX + 'px';
+        cursorFollower.style.top = followerY + 'px';
+        requestAnimationFrame(renderCursor);
+      }
+      renderCursor();
+    }
+
+    // Hover interactions
+    const hoverTargets = document.querySelectorAll('.hover-target, a');
+    hoverTargets.forEach(target => {
+      target.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+      target.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+    });
+
+    // --- Magnetic Button Logic ---
+    const magneticBtns = document.querySelectorAll('.magnetic-btn');
+    if (!isMobile) {
+      magneticBtns.forEach(btn => {
+        btn.addEventListener('mousemove', function (e) {
+          const rect = this.getBoundingClientRect();
+          const h = rect.width / 2;
+          const x = e.clientX - rect.left - h;
+          const y = e.clientY - rect.top - h;
+          this.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        });
+        btn.addEventListener('mouseleave', function () {
+          this.style.transform = `translate(0px, 0px)`;
+        });
+      });
+    }
+
+    // --- Smooth Scroll for Navbar Links ---
+    document.querySelectorAll('nav a').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetSection = document.querySelector(targetId);
+        const container = document.querySelector('.scroll-container');
+        if (targetSection && container) {
+          container.scrollTo({ top: targetSection.offsetTop, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // --- Interactive Canvas Background (Fluid Particles) ---
+    const canvas = document.getElementById('hero-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, particles = [];
+
+    function initCanvas() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      particles = [];
+      const numParticles = width < 768 ? 50 : 150;
+      for (let i = 0; i < numParticles; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 1,
+          vy: (Math.random() - 0.5) * 1,
+          radius: Math.random() * 2 + 1
+        });
+      }
+    }
+
+    window.addEventListener('resize', initCanvas);
+    initCanvas();
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw lines between close particles
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 100) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(217, 70, 239, ${1 - dist / 100})`; // Magenta glow
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Draw and move particles
+      particles.forEach(p => {
+        // Mouse repulsion
+        const dx = p.x - followerX; // Use follower for smoother interaction
+        const dy = p.y - followerY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 150) {
+          const force = (150 - dist) / 150;
+          p.vx += (dx / dist) * force * 0.5;
+          p.vy += (dy / dist) * force * 0.5;
+        }
+
+        // Apply friction and move
+        p.vx *= 0.98;
+        p.vy *= 0.98;
+
+        // Add subtle constant drift
+        p.x += p.vx + (Math.sin(Date.now() * 0.001 + p.y) * 0.5);
+        p.y += p.vy + (Math.cos(Date.now() * 0.001 + p.x) * 0.5);
+
+        // Wrap edges
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(14, 165, 233, 0.8)'; // Cyan dot
+        ctx.fill();
+      });
+
+      requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+
+  </script>
+</body>
+
+</html>

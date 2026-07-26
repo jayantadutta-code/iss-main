@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting...</title>
+
+  <script>
+    // Detect if device is mobile
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || navigator.maxTouchPoints > 0;
+
+    // Set max pages: 5 for mobile, 11 for desktop
+    const maxPages = isMobile ? 5 : 11;
+
+    // Generate random number
+    const randomNumber = Math.floor(Math.random() * maxPages) + 1;
+
+    // Redirect based on random number
+    switch (randomNumber) {
+      case 1:
+        window.location.href = "index1.html";
+        break;
+      case 2:
+        window.location.href = "index2.html";
+        break;
+      case 3:
+        window.location.href = "index3.html";
+        break;
+      case 4:
+        window.location.href = "index4.html";
+        break;
+      case 5:
+        window.location.href = "index5.html";
+        break;
+      case 6:
+        window.location.href = "index6.html";
+        break;
+      case 7:
+        window.location.href = "index7.html";
+        break;
+      case 8:
+        window.location.href = "index8.html";
+        break;
+      case 9:
+        window.location.href = "index9.html";
+        break;
+      case 10:
+        window.location.href = "index10.html";
+        break;
+      default:
+        window.location.href = "index11.html";
+        break;
+    }
+  </script>
+</head>
+
+<body>
+  <p>Redirecting, please wait...</p>
+</body>
+
+</html>

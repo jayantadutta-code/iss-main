@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, "", "/");
+    }
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>India Soft Solutions (ISS)</title>
+
+  <link rel="icon" type="image/x-icon" href="logo.ico" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary: #4d10f2;
+      --primary-light: #7c3aed;
+      --primary-gradient: linear-gradient(135deg, #4d10f2, #7c3aed);
+      --bg-color: #f8fafc;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --card-bg: #ffffff;
+      --border-color: #e2e8f0;
+    }
+
+    :target {
+      scroll-margin-top: 100px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Outfit', sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body::-webkit-scrollbar {
+      display: none;
+    }
+
+    body {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    html {
+      overflow-x: hidden;
+    }
+
+    img {
+      -webkit-user-drag: none;
+      pointer-events: none;
+    }
+
+    /* Floating Pill Navbar */
+    header {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 1200px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 50px;
+      padding: 10px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      transition: all 0.4s ease;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 1.5em;
+      color: var(--text-main);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    header img {
+      height: 50px;
+      margin-right: 12px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 500;
+      transition: color 0.3s;
+      font-size: 1.05em;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    /* Animations */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .fade-up.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Hero Section (Split Screen) */
+    #home {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 120px 8% 40px;
+      gap: 50px;
+      position: relative;
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      z-index: 2;
+    }
+
+    #home h1 {
+      font-size: 4em;
+      line-height: 1.1;
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: var(--text-main);
+      letter-spacing: -1.5px;
+    }
+
+    #home h1 span {
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    #home p {
+      font-size: 1.2em;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      max-width: 500px;
+      line-height: 1.6;
+    }
+
+    .home-btn {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 15px 35px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1.1em;
+      text-decoration: none;
+      box-shadow: 0 10px 20px rgba(77, 16, 242, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .home-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(77, 16, 242, 0.3);
+    }
+
+    .hero-image-wrapper {
+      position: relative;
+      width: 100%;
+      height: 600px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.1));
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-20px);
+      }
+
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
+    /* Sections Shared */
+    section:not(#home) {
+      padding: 100px 8%;
+      background: var(--bg-color);
+    }
+
+    .section-title {
+      font-size: 2.8em;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 60px;
+      color: var(--text-main);
+      letter-spacing: -1px;
+    }
+
+    /* About Section */
+    .about-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+    }
+
+    .white-card {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 40px 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03);
+      border: 1px solid var(--border-color);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .white-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--primary-gradient);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .white-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 60px rgba(77, 16, 242, 0.08);
+      border-color: transparent;
+    }
+
+    .white-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .white-card h3 {
+      font-size: 1.5em;
+      color: var(--text-main);
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .white-card p {
+      color: var(--text-muted);
+      line-height: 1.7;
+      font-size: 1.05em;
+    }
+
+    /* Services Section */
+    .services-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .service-card {
+      text-align: center;
+    }
+
+    .service-card .icon-wrapper {
+      width: 80px;
+      height: 80px;
+      background: #f1f5f9;
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 25px;
+      transition: all 0.4s ease;
+    }
+
+    .service-card:hover .icon-wrapper {
+      background: var(--primary);
+    }
+
+    .service-card:hover .icon-wrapper img {
+      filter: brightness(0) invert(1);
+    }
+
+    .service-card .icon-wrapper img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      transition: all 0.4s ease;
+    }
+
+    /* Products Section */
+    #products {
+      background: #ffffff;
+      border-radius: 40px;
+      margin: 0 2%;
+      padding: 100px 4%;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.02);
+    }
+
+    .product-table-wrap {
+      overflow-x: auto;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+    }
+
+    .product-table {
+      width: 100%;
+      min-width: 1000px;
+      border-collapse: collapse;
+      font-size: 0.95em;
+      background: var(--card-bg);
+    }
+
+    .product-table thead {
+      background: #f8fafc;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .product-table th {
+      padding: 20px 15px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.8em;
+    }
+
+    .product-table td {
+      padding: 15px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+      color: var(--text-main);
+    }
+
+    .product-table tr:hover {
+      background: #f1f5f9;
+    }
+
+    .product-table .logo-cell img {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      object-fit: contain;
+      background: #f8fafc;
+      padding: 5px;
+      border: 1px solid var(--border-color);
+    }
+
+    .product-table .name-cell {
+      font-weight: 700;
+      font-size: 1.1em;
+    }
+
+    .product-table .desc-cell {
+      color: var(--text-muted);
+      max-width: 250px;
+      line-height: 1.5;
+    }
+
+    .dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.85em;
+      font-weight: 600;
+      text-decoration: none;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .dl-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .dl-btn.exe {
+      background: #0078d4;
+    }
+
+    .dl-btn.apk {
+      background: #3ddc84;
+      color: #000;
+    }
+
+    .dl-btn.dmg {
+      background: #af52de;
+    }
+
+    .visit-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9em;
+      transition: color 0.3s;
+    }
+
+    .visit-link:hover {
+      color: var(--primary-light);
+    }
+
+    .coming-soon-tag {
+      font-size: 0.75em;
+      font-weight: 600;
+      color: #94a3b8;
+      background: #f1f5f9;
+      padding: 6px 12px;
+      border-radius: 20px;
+    }
+
+    /* Contact Section */
+    .contact-subtitle {
+      text-align: center;
+      font-size: 1.2em;
+      color: var(--text-muted);
+      margin-bottom: 50px;
+      margin-top: -40px;
+    }
+
+    .contact-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .contact-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 220px;
+      height: 220px;
+      border-radius: 30px;
+      text-decoration: none;
+      color: white;
+      font-weight: 600;
+      font-size: 1.2em;
+      transition: all 0.4s ease;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .contact-btn i {
+      font-size: 60px;
+      margin-bottom: 20px;
+    }
+
+    .contact-btn.call {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+    }
+
+    .contact-btn.whatsapp {
+      background: var(--primary-gradient);
+    }
+
+    .contact-btn.email {
+      background: linear-gradient(135deg, #EA4335, #D14836);
+    }
+
+    .contact-btn:hover {
+      transform: translateY(-15px);
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    .response-message {
+      text-align: center;
+      margin-top: 50px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: var(--text-muted);
+      font-weight: 500;
+      background: var(--card-bg);
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      #home {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding-top: 150px;
+      }
+
+      .hero-content {
+        align-items: center;
+      }
+
+      #home p {
+        margin: 0 auto 40px;
+      }
+
+      .hero-image-wrapper {
+        height: 400px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        width: 95%;
+        padding: 10px 20px;
+        flex-direction: column;
+        border-radius: 25px;
+      }
+
+      nav {
+        margin-top: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      #home h1 {
+        font-size: 2.8em;
+      }
+
+      .section-title {
+        font-size: 2.2em;
+      }
+
+      .contact-btn {
+        width: 100%;
+        max-width: 280px;
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Floating Navbar -->
+  <header>
+    <div class="logo-container">
+      <img src="logo.png" alt="ISS Logo" />
+      <h1>India Soft Solutions</h1>
+    </div>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#products">Products</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- Split Screen Hero -->
+  <section id="home">
+    <div class="hero-content fade-up">
+      <h1>Welcome to<br><span>India Soft Solutions</span></h1>
+      <p>We design and develop powerful digital experiences — from mobile apps to web platforms — to help businesses
+        grow with technology.</p>
+      <a href="#services" class="home-btn">Explore Our Work</a>
+    </div>
+    <div class="hero-image-wrapper fade-up">
+      <img src="hero-bg.png" alt="Hero 3D Tech Illustration" />
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <h2 class="section-title fade-up">About Us</h2>
+    <div class="about-content">
+      <div class="white-card fade-up">
+        <h3>🏢 Who We Are</h3>
+        <p>India Soft Solutions (ISS) is a creative and technology-driven SaaS company focused on delivering modern,
+          high-quality digital solutions for businesses and individuals. We specialize in web development, mobile apps,
+          and customized software designed to enhance user experience and business growth. With innovation, precision,
+          and customer satisfaction at our core, ISS transforms ideas into impactful digital realities.</p>
+      </div>
+      <div class="white-card fade-up">
+        <h3>🎯 Our Mission</h3>
+        <p>To provide reliable, scalable, and high-performance digital solutions that empower clients to reach new
+          heights through technology and innovation. We strive to blend creativity with technical excellence, ensuring
+          every project reflects quality, precision, and long-term value. Our mission is to help businesses evolve and
+          stay ahead in an ever-changing digital world.</p>
+      </div>
+      <div class="white-card fade-up">
+        <h3>🌟 Our Vision</h3>
+        <p>To be a global leader in digital innovation — inspiring change through smart technology, sustainable growth,
+          and creative transformation. We envision a connected world where every business, regardless of size, can
+          harness the power of technology to thrive, innovate, and make a positive impact on society.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services">
+    <h2 class="section-title fade-up">Our Services</h2>
+    <div class="services-container">
+      <div class="white-card service-card fade-up">
+        <div class="icon-wrapper">
+          <img src="www.png" alt="Web Development">
+        </div>
+        <h3>Web Development</h3>
+        <p>Custom websites with responsive design, modern frameworks, and SEO optimization.</p>
+      </div>
+      <div class="white-card service-card fade-up">
+        <div class="icon-wrapper">
+          <img src="appDev.png" alt="Mobile App Development">
+        </div>
+        <h3>Mobile App Development</h3>
+        <p>Android and iOS mobile app solutions with native and cross-platform development.</p>
+      </div>
+      <div class="white-card service-card fade-up">
+        <div class="icon-wrapper">
+          <img src="ux-ui.jpg" alt="UI/UX Design">
+        </div>
+        <h3>UI/UX Design</h3>
+        <p>Beautiful and user-friendly interface designs that enhance user experience.</p>
+      </div>
+      <div class="white-card service-card fade-up">
+        <div class="icon-wrapper">
+          <img src="Support___Maintenance.png" alt="Support & Maintenance">
+        </div>
+        <h3>Support & Maintenance</h3>
+        <p>24/7 technical support and regular maintenance for all your digital products.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products -->
+  <section id="products" class="fade-up">
+    <h2 class="section-title">Our Products</h2>
+    <div class="product-table-wrap">
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>SL</th>
+            <th>Logo</th>
+            <th>Name</th>
+            <th>Sort Description</th>
+            <th>Download .exe</th>
+            <th>Download .apk</th>
+            <th>Download .dmg</th>
+            <th>Visit Website</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>01</td>
+            <td class="logo-cell"><img src="nestlogo.png" alt="Nest Communication" /></td>
+            <td class="name-cell">Nest Communication</td>
+            <td class="desc-cell">Video Communication App, It support Meeting Creation, Joining via ID and live
+              camera/mic control, with clean and responsive UI.</td>
+            <td><a
+                href="https://github.com/jayantadutta-code/nestEXEfile/releases/download/v2.1.0/nest_communication.zip"
+                class="dl-btn exe"><i class="fab fa-windows"></i> .exe</a></td>
+            <td><a href="https://github.com/jayantadutta-code/nestAPKfile/releases/download/v2.1.0/app-release.apk"
+                class="dl-btn apk" target="_blank"><i class="fab fa-android"></i> .apk</a></td>
+            <td><a
+                href="https://github.com/jayantadutta-code/nestDMGfile/releases/download/v2.1.0/Nest.Communication.app.zip"
+                class="dl-btn dmg" target="_blank"><i class="fa-brands fa-apple"></i> .dmg</a></td>
+            <td><a href="https://nestcommunication.vercel.app/" class="visit-link" target="_blank"><i
+                  class="fas fa-external-link-alt"></i> Visit</a></td>
+          </tr>
+          <tr>
+            <td>02</td>
+            <td class="logo-cell"><img src="LeaseVault.png" alt="LeaseVault" /></td>
+            <td class="name-cell">LeaseVault</td>
+            <td class="desc-cell">Rental Management App, it is a Flutter-based rental management application powered by
+              a Supabase backend that streamlines the renting process for landlords (lessors) and tenants (lessees).
+            </td>
+            <td><a href="https://github.com/jayantadutta-code/LeaseVaultEXE/releases/download/v1.0.0/LeaseVault.zip"
+                class="dl-btn exe"><i class="fab fa-windows"></i> .exe</a></td>
+            <td><a href="https://github.com/jayantadutta-code/LeaseVaultAPK/releases/download/v1.0.0/app-release.apk"
+                class="dl-btn apk" target="_blank"><i class="fab fa-android"></i> .apk</a></td>
+            <td><a href="https://github.com/jayantadutta-code/LeaseVaultDMG/releases/download/v1.0.0/LeaseVault.app.zip"
+                class="dl-btn dmg" target="_blank"><i class="fa-brands fa-apple"></i> .dmg</a></td>
+
+            <td><a href="https://leasevaultweb.netlify.app" class="visit-link" target="_blank"><i
+                  class="fas fa-external-link-alt"></i> Visit</a></td>
+          </tr>
+          <tr>
+            <td>03</td>
+            <td class="logo-cell"><img src="logo.png" alt="SecureVault" /></td>
+            <td class="name-cell">SecureVault</td>
+            <td class="desc-cell">Encrypted password manager</td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+          </tr>
+          <tr>
+            <td>04</td>
+            <td class="logo-cell"><img src="logo.png" alt="DataFlow" /></td>
+            <td class="name-cell">DataFlow</td>
+            <td class="desc-cell">Real-time data sync &amp; analytics</td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+          </tr>
+          <tr>
+            <td>05</td>
+            <td class="logo-cell"><img src="logo.png" alt="CloudNest" /></td>
+            <td class="name-cell">CloudNest</td>
+            <td class="desc-cell">Cloud storage &amp; file sharing</td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+          </tr>
+          <tr>
+            <td>06</td>
+            <td class="logo-cell"><img src="logo.png" alt="SwiftCart" /></td>
+            <td class="name-cell">SwiftCart</td>
+            <td class="desc-cell">E-commerce platform for SMEs</td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+          </tr>
+          <tr>
+            <td>07</td>
+            <td class="logo-cell"><img src="logo.png" alt="HealthTrack" /></td>
+            <td class="name-cell">HealthTrack</td>
+            <td class="desc-cell">Patient health monitoring system</td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+          </tr>
+          <tr>
+            <td>08</td>
+            <td class="logo-cell"><img src="logo.png" alt="EduSmart" /></td>
+            <td class="name-cell">EduSmart</td>
+            <td class="desc-cell">AI-powered learning management</td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+          </tr>
+          <tr>
+            <td>09</td>
+            <td class="logo-cell"><img src="logo.png" alt="FinSecure" /></td>
+            <td class="name-cell">FinSecure</td>
+            <td class="desc-cell">Blockchain-based financial security</td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td class="logo-cell"><img src="logo.png" alt="FinSecure" /></td>
+            <td class="name-cell">FinSecure</td>
+            <td class="desc-cell">Blockchain-based financial security</td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+            <td><span class="coming-soon-tag">Coming Soon</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <h2 class="section-title fade-up">Contact Us</h2>
+    <p class="contact-subtitle fade-up">Get in touch with us through any of these convenient methods</p>
+    <div class="contact-buttons">
+      <a href="tel:+918250227952" class="contact-btn call fade-up">
+        <i class="fas fa-phone-alt"></i>
+        <span>CALL US</span>
+      </a>
+      <a href="https://wa.me/918250227952" class="contact-btn whatsapp fade-up">
+        <i class="fab fa-whatsapp"></i>
+        <span>WHATSAPP</span>
+      </a>
+      <a href="mailto:indiasoftsolutions2025@gmail.com" class="contact-btn email fade-up">
+        <i class="fas fa-envelope"></i>
+        <span>EMAIL US</span>
+      </a>
+    </div>
+    <p class="response-message fade-up">We typically respond 24/7 during business days.</p>
+  </section>
+
+  <footer>
+    <p>© 2026 India Soft Solutions | All Rights Reserved</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Setup intersection observer for fade-up animations
+      const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -50px 0px' };
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animated');
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+      // Smooth scroll for nav links
+      document.querySelectorAll('nav a').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

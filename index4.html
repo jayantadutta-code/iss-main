@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, "", "/");
+    }
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>India Soft Solutions | World-Class Experience</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="logo.ico" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Google Fonts: Syncopate & Manrope -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #09090b;
+      --accent: #10b981;      /* Emerald Green */
+      --accent-glow: rgba(16, 185, 129, 0.4);
+      --text: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --card-bg: rgba(255, 255, 255, 0.02);
+      --card-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Manrope', sans-serif;
+      color: var(--text);
+      background-color: var(--bg);
+      overflow: hidden; /* Hide default scrollbars for custom horizontal scroll */
+      overscroll-behavior: none;
+    }
+
+    h1, h2, h3, .brand {
+      font-family: 'Syncopate', sans-serif;
+      text-transform: uppercase;
+    }
+
+    /* --- Custom Scroll Track --- */
+    .scroll-container {
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0; left: 0;
+      overflow: hidden;
+    }
+
+    .scroll-track {
+      display: flex;
+      height: 100vh;
+      width: max-content; /* Expands to fit all children horizontally */
+      will-change: transform;
+    }
+
+    /* --- Sections --- */
+    .section {
+      width: 100vw; /* Each section is full screen width */
+      height: 100vh;
+      flex-shrink: 0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 5vw;
+    }
+
+    .section-auto {
+      width: auto;
+      min-width: 50vw;
+      padding: 0 5vw;
+    }
+
+    /* --- Header / Navigation --- */
+    header {
+      position: fixed;
+      top: 40px;
+      left: 5vw;
+      right: 5vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      mix-blend-mode: difference;
+    }
+    .brand-group { display: flex; align-items: center; gap: 15px; }
+    .brand-group img { height: 40px; }
+    .brand { font-size: 1.2em; font-weight: 700; letter-spacing: 2px; }
+    
+    .nav-indicator {
+      font-size: 0.9em;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      text-transform: uppercase;
+    }
+    .progress-bar-bg { width: 150px; height: 2px; background: rgba(255,255,255,0.2); position: relative; }
+    .progress-bar { position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: var(--accent); }
+
+    /* --- Hero Section --- */
+    .bg-emerald {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url('emerald_track.png');
+      background-size: cover;
+      background-position: center;
+      z-index: -1;
+      opacity: 0.4;
+      mask-image: linear-gradient(to right, black 50%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, black 50%, transparent 100%);
+    }
+
+    .hero-title {
+      font-size: 8vw;
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: -2px;
+      white-space: nowrap;
+      margin-bottom: 20px;
+    }
+    .hero-title span { color: var(--accent); }
+    .hero-subtitle {
+      font-size: 1.5vw;
+      color: var(--text-muted);
+      max-width: 600px;
+      letter-spacing: 1px;
+    }
+
+    /* --- About Typography --- */
+    .about-text {
+      font-size: 3vw;
+      line-height: 1.4;
+      max-width: 1200px;
+      font-weight: 300;
+    }
+    .about-text strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* --- 3D Tilt Cards (Services) --- */
+    .cards-wrapper {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .tilt-card {
+      width: 350px;
+      height: 450px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      transform-style: preserve-3d;
+      will-change: transform;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    }
+    .tilt-card-inner {
+      transform: translateZ(60px); /* Pushes content out in 3D space */
+      pointer-events: none;
+    }
+    .tilt-card i { font-size: 3em; color: var(--accent); margin-bottom: 25px; }
+    .tilt-card h3 { font-size: 1.5em; margin-bottom: 15px; letter-spacing: 1px; }
+    .tilt-card p { color: var(--text-muted); line-height: 1.6; }
+
+    /* Dynamic Glare Effect */
+    .glare {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1), transparent 60%);
+      border-radius: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      mix-blend-mode: overlay;
+    }
+    .tilt-card:hover .glare { opacity: 1; }
+
+    /* --- Products Terminal / Detail --- */
+    .bg-detail {
+      position: absolute;
+      top: 0; left: 0; width: 200vw; height: 100%;
+      background-image: url('emerald_detail.png');
+      background-size: cover;
+      background-position: left center;
+      z-index: -1;
+      opacity: 0.2;
+    }
+    
+    .product-grid {
+      display: grid;
+      grid-template-rows: repeat(2, 1fr);
+      grid-auto-flow: column;
+      gap: 30px;
+      padding-top: 50px;
+    }
+
+    .product-item {
+      width: 400px;
+      background: rgba(10, 10, 12, 0.8);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border: 1px solid var(--accent-glow);
+      border-radius: 20px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      transition: all 0.3s;
+    }
+    .product-item:hover {
+      box-shadow: 0 0 40px rgba(16, 185, 129, 0.15);
+      transform: translateY(-10px);
+    }
+    .prod-head { display: flex; align-items: center; gap: 20px; }
+    .prod-head img { width: 60px; height: 60px; background: #fff; padding: 10px; border-radius: 16px; object-fit: contain; }
+    .prod-info h4 { font-size: 1.2em; font-family: 'Manrope', sans-serif; font-weight: 600; color: #fff; }
+    .prod-desc { color: var(--text-muted); font-size: 0.9em; line-height: 1.5; flex-grow: 1; }
+    
+    .prod-links { display: flex; gap: 10px; margin-top: auto; flex-wrap: wrap; }
+    .prod-links a, .prod-links span {
+      padding: 8px 15px;
+      border-radius: 8px;
+      font-size: 0.8em;
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    .dl-btn { background: rgba(255,255,255,0.1); color: #fff; transition: 0.3s; }
+    .dl-btn:hover { background: var(--accent); color: #000; }
+    .disabled { opacity: 0.4; background: rgba(255,255,255,0.05); }
+
+    /* --- Contact --- */
+    .contact-title { font-size: 6vw; margin-bottom: 40px; }
+    .contact-links { display: flex; gap: 50px; }
+    .contact-link {
+      font-size: 2em;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      transition: 0.3s;
+    }
+    .contact-link:hover { color: var(--accent); transform: scale(1.05); }
+
+    /* Mobile Fallback */
+    @media (max-width: 900px) {
+      body { overflow-y: auto; overflow-x: hidden; }
+      .scroll-container { position: relative; height: auto; }
+      .scroll-track { flex-direction: column; height: auto; width: 100vw; transform: none !important; }
+      .section, .section-auto { width: 100vw; min-height: 100vh; height: auto; padding: 100px 20px; }
+      .cards-wrapper { flex-direction: column; }
+      .product-grid { grid-template-rows: auto; grid-auto-flow: row; }
+      .product-item, .tilt-card { width: 100%; }
+      .hero-title { font-size: 15vw; white-space: normal; }
+      .hero-subtitle { font-size: 4vw; }
+      .about-text { font-size: 6vw; }
+      .bg-emerald { mask-image: none; -webkit-mask-image: none; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand-group">
+      <img src="logo.png" alt="Logo" />
+      <div class="brand">I.S.S</div>
+    </div>
+    <div class="nav-indicator">
+      <span>Scroll</span>
+      <div class="progress-bar-bg">
+        <div class="progress-bar" id="progress"></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="scroll-container">
+    <div class="scroll-track" id="track">
+      
+      <!-- 1. Hero -->
+      <div class="section">
+        <div class="bg-emerald"></div>
+        <h1 class="hero-title">India<br>Soft <span>Solutions</span></h1>
+        <p class="hero-subtitle">World-class digital engineering. We craft premium web platforms, mobile applications, and resilient software ecosystems.</p>
+      </div>
+
+      <!-- 2. About -->
+      <div class="section">
+        <p class="about-text">
+          We are a creative and technology-driven SaaS company. Our mission is to provide <strong>reliable, scalable, and high-performance</strong> digital solutions that empower clients to reach new heights through <strong>technology and innovation</strong>.
+        </p>
+      </div>
+
+      <!-- 3. Services (3D Tilt Cards) -->
+      <div class="section section-auto">
+        <div class="cards-wrapper">
+          
+          <div class="tilt-card">
+            <div class="glare"></div>
+            <div class="tilt-card-inner">
+              <i class="fas fa-globe"></i>
+              <h3>Web Development</h3>
+              <p>Custom websites with responsive design, modern frameworks, and unparalleled SEO optimization.</p>
+            </div>
+          </div>
+
+          <div class="tilt-card">
+            <div class="glare"></div>
+            <div class="tilt-card-inner">
+              <i class="fas fa-mobile-alt"></i>
+              <h3>Mobile Apps</h3>
+              <p>Flawless Android and iOS mobile app solutions engineered with native and cross-platform technologies.</p>
+            </div>
+          </div>
+
+          <div class="tilt-card">
+            <div class="glare"></div>
+            <div class="tilt-card-inner">
+              <i class="fas fa-pen-nib"></i>
+              <h3>UI/UX Design</h3>
+              <p>World-class, beautiful, and user-friendly interface designs that dramatically enhance user retention.</p>
+            </div>
+          </div>
+
+          <div class="tilt-card">
+            <div class="glare"></div>
+            <div class="tilt-card-inner">
+              <i class="fas fa-headset"></i>
+              <h3>Support</h3>
+              <p>24/7 technical support and rigorous regular maintenance for all your critical digital products.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 4. Products Track -->
+      <div class="section section-auto" style="padding-right: 0;">
+        <div class="bg-detail"></div>
+        <h2 style="font-size: 3vw; margin-bottom: 20px;">The Ecosystem</h2>
+        <div class="product-grid">
+          
+          <div class="product-item">
+            <div class="prod-head">
+              <img src="nestlogo.png" alt="Nest">
+              <div class="prod-info"><h4>Nest Communication</h4></div>
+            </div>
+            <p class="prod-desc">Video Communication App. Supports Meeting Creation, Joining via ID and live camera/mic control.</p>
+            <div class="prod-links">
+              <a href="https://github.com/jayantadutta-code/nestEXEfile/releases/download/v2.1.0/nest_communication.zip" class="dl-btn">EXE</a>
+              <a href="https://github.com/jayantadutta-code/nestAPKfile/releases/download/v2.1.0/app-release.apk" class="dl-btn" target="_blank">APK</a>
+              <a href="https://github.com/jayantadutta-code/nestDMGfile/releases/download/v2.1.0/Nest.Communication.app.zip" class="dl-btn" target="_blank">DMG</a>
+              <a href="https://nestcommunication.vercel.app/" class="dl-btn" target="_blank" style="background: var(--accent); color:#000;">Visit</a>
+            </div>
+          </div>
+
+          <div class="product-item">
+            <div class="prod-head">
+              <img src="LeaseVault.png" alt="LeaseVault">
+              <div class="prod-info"><h4>LeaseVault</h4></div>
+            </div>
+            <p class="prod-desc">Rental Management App, it is a Flutter-based rental management application powered by a Supabase backend that streamlines the renting process for landlords and tenants.</p>
+            <div class="prod-links">
+              <a href="https://github.com/jayantadutta-code/LeaseVaultEXE/releases/download/v1.0.0/lease_vault.zip" class="dl-btn">EXE</a>
+              <a href="https://github.com/jayantadutta-code/LeaseVaultAPK/releases/download/v1.0.0/app-release.apk" class="dl-btn" target="_blank">APK</a>
+              <a href="https://github.com/jayantadutta-code/LeaseVaultDMG/releases/download/v1.0.0/LeaseVault.app.zip" class="dl-btn" target="_blank">DMG</a>
+              <a href="https://leasevaultweb.netlify.app" class="dl-btn" target="_blank" style="background: var(--accent); color:#000;">Visit</a>
+            </div>
+          </div>
+
+          <div class="product-item">
+            <div class="prod-head"><img src="logo.png" alt="SecureVault"><div class="prod-info"><h4>SecureVault</h4></div></div>
+            <p class="prod-desc">Encrypted password manager</p>
+            <div class="prod-links"><span class="disabled">Coming Soon</span></div>
+          </div>
+
+          <div class="product-item">
+            <div class="prod-head"><img src="logo.png" alt="DataFlow"><div class="prod-info"><h4>DataFlow</h4></div></div>
+            <p class="prod-desc">Real-time data sync & analytics</p>
+            <div class="prod-links"><span class="disabled">Coming Soon</span></div>
+          </div>
+
+          <div class="product-item">
+            <div class="prod-head"><img src="logo.png" alt="CloudNest"><div class="prod-info"><h4>CloudNest</h4></div></div>
+            <p class="prod-desc">Cloud storage & file sharing platform</p>
+            <div class="prod-links"><span class="disabled">Coming Soon</span></div>
+          </div>
+
+          <div class="product-item">
+            <div class="prod-head"><img src="logo.png" alt="SwiftCart"><div class="prod-info"><h4>SwiftCart</h4></div></div>
+            <p class="prod-desc">E-commerce platform for SMEs</p>
+            <div class="prod-links"><span class="disabled">Coming Soon</span></div>
+          </div>
+          
+          <div class="product-item">
+            <div class="prod-head"><img src="logo.png" alt="HealthTrack"><div class="prod-info"><h4>HealthTrack</h4></div></div>
+            <p class="prod-desc">Patient health monitoring system</p>
+            <div class="prod-links"><span class="disabled">Coming Soon</span></div>
+          </div>
+
+          <div class="product-item">
+            <div class="prod-head"><img src="logo.png" alt="EduSmart"><div class="prod-info"><h4>EduSmart</h4></div></div>
+            <p class="prod-desc">AI-powered learning management</p>
+            <div class="prod-links"><span class="disabled">Coming Soon</span></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 5. Contact -->
+      <div class="section" style="width: 70vw;">
+        <h2 class="contact-title">Let's Build<br><span style="color:var(--accent);">The Future</span></h2>
+        <div class="contact-links">
+          <a href="tel:+918250227952" class="contact-link"><i class="fas fa-phone"></i></a>
+          <a href="https://wa.me/918250227952" target="_blank" class="contact-link"><i class="fab fa-whatsapp"></i></a>
+          <a href="mailto:indiasoftsolutions2025@gmail.com" class="contact-link"><i class="fas fa-envelope"></i></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // --- Horizontal Scroll Logic ---
+    const track = document.getElementById('track');
+    const progressBar = document.getElementById('progress');
+    let scrollPos = 0;
+    let targetPos = 0;
+
+    // Only apply custom scroll on desktop
+    const isDesktop = window.innerWidth > 900;
+
+    if(isDesktop) {
+      window.addEventListener('wheel', (e) => {
+        // Prevent default vertical scroll
+        e.preventDefault();
+        
+        // Add wheel delta to target position
+        targetPos += e.deltaY;
+        
+        // Clamp values
+        const maxScroll = track.scrollWidth - window.innerWidth;
+        targetPos = Math.max(0, Math.min(targetPos, maxScroll));
+      }, { passive: false });
+
+      // Add touch support for large tablets
+      let touchStartX = 0;
+      window.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].clientX;
+      }, { passive: true });
+
+      window.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        const touchX = e.changedTouches[0].clientX;
+        const deltaX = touchStartX - touchX;
+        touchStartX = touchX;
+
+        targetPos += deltaX * 2; // Multiplier for scroll speed
+        
+        const maxScroll = track.scrollWidth - window.innerWidth;
+        targetPos = Math.max(0, Math.min(targetPos, maxScroll));
+      }, { passive: false });
+
+      // Smooth interpolation for luxurious feel
+      function renderScroll() {
+        scrollPos += (targetPos - scrollPos) * 0.08;
+        track.style.transform = `translate3d(-${scrollPos}px, 0, 0)`;
+        
+        // Update Progress Bar
+        const maxScroll = track.scrollWidth - window.innerWidth;
+        const progress = (scrollPos / maxScroll) * 100;
+        progressBar.style.width = `${progress}%`;
+        
+        requestAnimationFrame(renderScroll);
+      }
+      renderScroll();
+    }
+
+    // --- 3D Tilt Card Logic ---
+    const cards = document.querySelectorAll('.tilt-card');
+    
+    cards.forEach(card => {
+      const glare = card.querySelector('.glare');
+      
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left; // x position within the element
+        const y = e.clientY - rect.top;  // y position within the element
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        // Calculate rotation based on distance from center
+        const rotateX = ((y - centerY) / centerY) * -15; // Max 15 deg
+        const rotateY = ((x - centerX) / centerX) * 15;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        
+        // Move glare effect
+        if(glare) {
+          glare.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.15), transparent 60%)`;
+        }
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        card.style.transition = 'transform 0.5s ease-out';
+        setTimeout(() => { card.style.transition = ''; }, 500); // Remove transition after reset to keep mousemove smooth
+      });
+    });
+  </script>
+</body>
+</html>
