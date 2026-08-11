@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🚀 EOS Digital Space (ISS)
+# 🚀 EOS Digital Space
 
 **Creative & Technology-Driven SaaS Solutions for Web, Mobile, and Desktop**
 
@@ -16,7 +16,7 @@
 
 ## 📌 Overview
 
-**EOS Digital Space (ISS)** is a creative and technology-driven SaaS organization focused on delivering modern, high-quality digital solutions for businesses and individuals. We specialize in cross-platform application development (Web, Android, macOS, Windows), UI/UX design, and customized cloud software engineered to enhance user experience and scale business growth.
+**EOS Digital Space** is a creative and technology-driven SaaS organization focused on delivering modern, high-quality digital solutions for businesses and individuals. We specialize in cross-platform application development (Web, Android, macOS, Windows), UI/UX design, and customized cloud software engineered to enhance user experience and scale business growth.
 
 This repository powers the official multi-landing digital portal for EOS Digital Space, showcasing our flagship product suite, interactive designs, and cross-platform application downloads.
 
@@ -109,6 +109,6 @@ For business inquiries, custom software development, or technical support:
 
 <div align="center">
 
-*© EOS Digital Space (ISS). All rights reserved.*
+*© EOS Digital Space. All rights reserved.*
 
 </div>
