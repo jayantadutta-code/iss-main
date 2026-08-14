@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://eosdigitalspace.vercel.app/sitemap.xml
+Sitemap: https://eosdigitalspace.in/sitemap.xml
+
