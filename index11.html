@@ -44,6 +44,10 @@
       padding: 0;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       background-color: var(--bg-dark);
       color: var(--text-light);
@@ -536,7 +540,7 @@
       <span>EOS DIGITAL SPACE</span>
     </a>
     <div class="nav-controls">
-      <a href="#home" class="back-btn"><i class="fas fa-home"></i> Home</a>
+      <a href="#sec-hero" class="back-btn" id="home-btn"><i class="fas fa-home"></i> Home</a>
       <button class="audio-toggle-btn" id="audio-toggle"><i class="fas fa-volume-mute"></i> Sound On</button>
     </div>
   </header>
@@ -887,6 +891,17 @@
         targetScrollProgress = window.scrollY / docHeight;
       }
       updateVisiblePanels();
+    });
+
+    // Home button auto scroll to top section
+    document.querySelectorAll('.back-btn, .logo').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
     });
 
     function updateVisiblePanels() {
